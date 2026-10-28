@@ -1,0 +1,102 @@
+/* The movement belongs to the artwork and the interface, not the documentary image. */
+.reading-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 110;
+  height: 3px;
+  pointer-events: none;
+  background: linear-gradient(90deg, #8b9a6a, #315f53 60%, #387f83);
+  transform: scaleX(var(--reading-progress, 0));
+  transform-origin: left;
+}
+
+.artwork-depth { position: absolute; inset: -2%; transform: translate3d(var(--pointer-x, 0px), var(--pointer-y, 0px), 0); }
+.artwork-image { animation: landscape-drift 20s ease-in-out infinite alternate; }
+.water-light {
+  position: absolute;
+  inset: -22%;
+  background: radial-gradient(ellipse at 32% 62%, #69dfca60, transparent 42%), radial-gradient(ellipse at 75% 35%, #c9eadc60, transparent 38%);
+  mix-blend-mode: soft-light;
+  opacity: .5;
+  pointer-events: none;
+  animation: tide-drift 16s ease-in-out infinite alternate;
+}
+#water-canvas { opacity: .85; }
+.live-label > span { animation: water-signal 4s ease-in-out infinite; }
+.cursor-orbit { position: relative; }
+.cursor-orbit::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px solid #e5efe36b;
+  border-radius: 50%;
+  animation: cursor-ripple 3.8s ease-out infinite;
+}
+
+.archive-card { transition: transform .35s cubic-bezier(.22, 1, .36, 1); }
+.card-open { transition: transform .35s, background .2s; }
+.card-open .icon { transition: transform .35s; }
+.archive-card:focus-visible .card-open { background: #314c3d; transform: rotate(45deg); }
+.archive-card:focus-visible .card-open .icon { transform: rotate(-45deg); }
+.header-cta, .primary-button, .closing > a { transition: transform .25s, background .25s, border-color .25s; }
+.header-cta:active, .primary-button:active { transform: scale(.97); }
+.nav-link.active::after { animation: dot-arrive .3s ease-out; }
+
+.timeline { position: relative; --timeline-progress: .666667; }
+.timeline::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #748961;
+  transform-origin: left;
+  transform: scaleX(var(--timeline-progress));
+  transition: transform .65s cubic-bezier(.22, 1, .36, 1);
+  pointer-events: none;
+}
+.timeline button span { z-index: 1; }
+.timeline button.active span { animation: timeline-echo .8s ease-out; }
+.content-dialog[open] { animation: dialog-arrive .32s cubic-bezier(.22, 1, .36, 1); }
+.content-dialog[open]::backdrop { animation: backdrop-arrive .25s ease-out; }
+.detail-media { overflow: hidden; }
+.content-dialog[open] .detail-media img { animation: photo-arrive .5s cubic-bezier(.22, 1, .36, 1); }
+.desktop-nav.open { animation: menu-arrive .22s ease-out; }
+
+@media (hover: hover) and (pointer: fine) {
+  .archive-card:hover { transform: translateY(-5px); }
+  .archive-card:hover .card-open { transform: rotate(45deg); }
+  .archive-card:hover .card-open .icon { transform: rotate(-45deg); }
+  .header-cta:hover { transform: translateY(-2px); border-color: #48653f; }
+  .closing > a:hover { transform: translateY(-3px); background: #e9edde; }
+}
+
+@keyframes landscape-drift {
+  from { translate: -1% 1%; scale: 1.01; }
+  to { translate: 1% -1.4%; scale: 1.055; }
+}
+@keyframes tide-drift {
+  from { transform: translate3d(-5%, 3%, 0) rotate(-8deg); }
+  to { transform: translate3d(7%, -4%, 0) rotate(7deg); }
+}
+@keyframes water-signal { 0%, 100% { opacity: .65; } 50% { opacity: 1; } }
+@keyframes cursor-ripple { 0% { transform: scale(1); opacity: .6; } 85%, 100% { transform: scale(1.75); opacity: 0; } }
+@keyframes dot-arrive { from { scale: 0; } to { scale: 1; } }
+@keyframes timeline-echo { from { box-shadow: 0 0 0 2px #e9edde, 0 0 0 3px #bdc7ad; } to { box-shadow: 0 0 0 5px #e9edde, 0 0 0 6px #bdc7ad; } }
+@keyframes dialog-arrive { from { opacity: 0; translate: 0 20px; } to { opacity: 1; translate: 0 0; } }
+@keyframes backdrop-arrive { from { background-color: #112b2b00; } to { background-color: #112b2b9c; } }
+@keyframes photo-arrive { from { opacity: .5; scale: 1.025; } to { opacity: 1; scale: 1; } }
+@keyframes menu-arrive { from { opacity: 0; translate: 0 -6px; } to { opacity: 1; translate: 0 0; } }
+
+.motion-paused, .motion-paused * { scroll-behavior: auto; }
+.motion-paused .artwork-image, .motion-paused .water-light, .motion-paused .live-label > span, .motion-paused .cursor-orbit::after,
+.motion-backgrounded .artwork-image, .motion-backgrounded .water-light, .motion-backgrounded .live-label > span, .motion-backgrounded .cursor-orbit::after,
+.artwork.is-offscreen .artwork-image, .artwork.is-offscreen .water-light, .artwork.is-offscreen .live-label > span, .artwork.is-offscreen .cursor-orbit::after { animation-play-state: paused; }
+.motion-paused .content-dialog, .motion-paused .content-dialog::backdrop, .motion-paused .detail-media img, .motion-paused .desktop-nav, .motion-paused .timeline button span, .motion-paused .nav-link::after { animation: none; }
+.motion-paused .artwork-image, .motion-paused .timeline::after { transition: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .artwork-depth { transform: none; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

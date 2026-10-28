@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 550">
+  <defs>
+    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="3" seed="22" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".11"/></feComponentTransfer><feBlend in="SourceGraphic" mode="multiply"/></filter>
+    <pattern id="plots" width="72" height="52" patternTransform="rotate(-19)" patternUnits="userSpaceOnUse"><path d="M0 0H72V52H0Z" fill="none" stroke="#b7baa2" stroke-width=".8"/><path d="M36 0V52M0 26h72" fill="none" stroke="#b7baa2" stroke-width=".3"/></pattern>
+    <pattern id="grid" width="110" height="110" patternUnits="userSpaceOnUse"><path d="M110 0H0V110" stroke="#667b6c" stroke-width=".5" fill="none"/></pattern>
+    <radialGradient id="light"><stop stop-color="#eeebd5"/><stop offset="1" stop-color="#c5ccb6"/></radialGradient>
+  </defs>
+  <rect width="900" height="550" fill="url(#light)"/>
+  <g fill="none" stroke="#b6bda4" stroke-width="1.3" opacity=".8">
+    <path d="M-100 120Q70 180 150 62T420 18 650 49 1000-42M-100 145Q70 205 170 87T420 43 650 74 1000-17M-100 170Q70 230 190 112T420 68 650 99 1000 8M-100 195Q70 255 210 137T420 93 650 124 1000 33M-100 220Q70 280 230 162T420 118 650 149 1000 58M-100 245Q70 305 250 187T420 143 650 174 1000 83"/>
+    <path d="M-40 520Q180 360 340 460T650 450 970 340M-40 545Q180 385 340 485T650 475 970 365M-40 570Q180 410 340 510T650 500 970 390M-40 595Q180 435 340 535T650 525 970 415M-40 620Q180 460 340 560T650 550 970 440"/>
+  </g>
+  <path d="M-30 480Q140 540 290 390T520 300 710 150 950 120" fill="none" stroke="#a4b8a1" stroke-width="130" opacity=".38"/>
+  <path d="M-30 480Q140 540 290 390T520 300 710 150 950 120" fill="none" stroke="#a1b9ac" stroke-width="55"/>
+  <path d="M-30 480Q140 540 290 390T520 300 710 150 950 120" fill="none" stroke="#628c88" stroke-width="20"/>
+  <path d="M-30 480Q140 540 290 390T520 300 710 150 950 120" fill="none" stroke="#93b1a1" stroke-width="4"/>
+  <path d="m60 10 120 62 130-30 110 130-80 50-190 60L30 190Z" fill="url(#plots)" opacity=".8"/>
+  <path d="m530 370 160-80 130 40 70 190-160 70-240-50Z" fill="url(#plots)"/>
+  <g fill="#b0b49a" stroke="#dadbc0" stroke-width="2" transform="translate(290 235) rotate(-20)"><path d="M0 0h20v12H0zM27 0h12v19H27zM45 0h22v12H45zM0 20h17v20H0zM25 26h21v15H25zM52 20h13v22H52zM75 4h20v14H75zM75 26h16v20H75zM-26 8h18v26H-26zM-24 43h25v15H-24zM10 48h22v13H10zM40 49h26v12H40z"/></g>
+  <rect width="900" height="550" fill="url(#grid)" opacity=".23"/>
+  <g fill="none" stroke="#526b51" opacity=".7"><circle cx="357" cy="305" r="24"/><circle cx="357" cy="305" r="39" stroke-dasharray="2 5"/><path d="M357 291v28m-14-14h28M681 188v28m-14-14h28"/><circle cx="681" cy="202" r="24"/></g>
+  <g fill="#607359" font-family="monospace" font-size="10" letter-spacing="2"><text x="395" y="310">MEMORIA DEL CAUCE</text><text x="52" y="61">PAISAJE / ESTUDIO 003</text></g>
+  <rect width="900" height="550" fill="transparent" filter="url(#grain)"/>
+</svg>

@@ -40,5 +40,37 @@
     "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
     "changes": "Imagen sin retoques. Miniatura ajustada por CSS; vista ampliada completa. Versión de 1920 px distribuida por Wikimedia Commons.",
     "sha256": "3854c4be7ff6d562b7db0085a4ef60cf9c3d42b9928f13a5da07dfc00e4c939a"
+  },
+  {
+    "file": "piura-puente-bolognesi-huella-1998.jpg",
+    "originalTitle": "Puente Bolognesi destruido.JPG",
+    "author": "Alfredobi (atribución de Wikimedia Commons)",
+    "dateTaken": null,
+    "eventPeriod": "1997–1998",
+    "uploadedAt": "2006-02-10",
+    "dateNote": "La ficha no indica fecha de toma. 2006-02-10 corresponde a la subida del archivo; 1998 es el episodio referido.",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Puente_Bolognesi_destruido.JPG",
+    "originalImage": "https://upload.wikimedia.org/wikipedia/commons/0/07/Puente_Bolognesi_destruido.JPG",
+    "downloadedImage": "https://upload.wikimedia.org/wikipedia/commons/0/07/Puente_Bolognesi_destruido.JPG",
+    "license": "Dominio público (declaración del titular en Commons)",
+    "licenseUrl": "https://commons.wikimedia.org/wiki/File:Puente_Bolognesi_destruido.JPG#Licensing",
+    "changes": "Sin retoques. Miniatura ajustada por CSS; vista ampliada completa. Archivo original de 711 × 533 px.",
+    "sha256": "704e41342cc2c2d422ff23a98f8c5b9a4f88179065d656aa5eba450c413f287a",
+    "verifiedAt": "2026-10-28"
+  },
+  {
+    "file": "tumbes-lluvias-2023.jpg",
+    "originalTitle": "MINISTRO DE DEFENSA REALIZA VISITA DE INSPECCIÓN A ZONAS AFECTADAS POR LLUVIAS INTENSAS EN TUMBES (52738280667).jpg",
+    "author": "Ministerio de Defensa del Perú",
+    "dateTaken": "2023-03-10 14:52",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:MINISTRO_DE_DEFENSA_REALIZA_VISITA_DE_INSPECCI%C3%93N_A_ZONAS_AFECTADAS_POR_LLUVIAS_INTENSAS_EN_TUMBES_(52738280667).jpg",
+    "originalCredit": "https://www.flickr.com/photos/ministeriodedefensaperu/52738280667/",
+    "originalImage": "https://upload.wikimedia.org/wikipedia/commons/6/65/MINISTRO_DE_DEFENSA_REALIZA_VISITA_DE_INSPECCI%C3%93N_A_ZONAS_AFECTADAS_POR_LLUVIAS_INTENSAS_EN_TUMBES_%2852738280667%29.jpg",
+    "downloadedImage": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/65/MINISTRO_DE_DEFENSA_REALIZA_VISITA_DE_INSPECCI%C3%93N_A_ZONAS_AFECTADAS_POR_LLUVIAS_INTENSAS_EN_TUMBES_%2852738280667%29.jpg/1280px-MINISTRO_DE_DEFENSA_REALIZA_VISITA_DE_INSPECCI%C3%93N_A_ZONAS_AFECTADAS_POR_LLUVIAS_INTENSAS_EN_TUMBES_%2852738280667%29.jpg",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "changes": "Sin retoques. Miniatura ajustada por CSS; vista ampliada completa. Versión de 1280 px distribuida por Wikimedia Commons.",
+    "sha256": "82a64ca56be2806f744fbf101882e4fc4fb9a1d6d4088841d287ce63658baa8e",
+    "verifiedAt": "2026-10-28"
   }
 ]

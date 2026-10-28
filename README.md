@@ -1,6 +1,6 @@
 # Al margen
 
-Página interactiva del proyecto **«La ilusión de habitar al margen»**, sobre El Niño, el agua y la memoria del territorio en Piura. Elaborada a partir de los dos documentos del equipo de Arte y Tecnología de UTEC.
+Página interactiva del proyecto **«La ilusión de habitar al margen»**, sobre El Niño, el agua y la memoria del territorio en la costa norte del Perú, con Piura como punto de partida. Elaborada a partir de los dos documentos del equipo de Arte y Tecnología de UTEC.
 
 ## Desarrollo
 
@@ -27,9 +27,10 @@ Las pruebas usan Chromium del sistema cuando está disponible en `/usr/bin/chrom
 - Paisaje con partículas, ondas y desplazamiento suave que responden al cursor, iluminación en movimiento y tres etapas: calma, memoria y retorno. GSAP interpola la mezcla entre tierra y agua, el encuadre y el flujo de partículas al cambiar de etapa.
 - Entrada progresiva de secciones y tarjetas al desplazarse e indicador de avance de lectura. Las etapas, la línea de memoria y los filtros conservan la vista saliente mientras entra la siguiente; los indicadores se desplazan hasta la nueva selección y la altura del contenido cambia gradualmente.
 - Pausa del movimiento decorativo de la página, pantalla completa, sonido ambiental opcional y respeto a la preferencia de movimiento reducido. Si el dispositivo reduce el movimiento, se muestra una indicación y la persona puede activarlo expresamente con reproducir. Pausar o cambiar esa preferencia durante una transición deja el estado final legible. Las animaciones del paisaje se suspenden cuando sale de la pantalla; los efectos se detienen al ocultar la pestaña.
-- Archivo filtrable con tres fotografías documentales de Piura en marzo de 2017, contexto de los casos y fuentes.
+- Archivo de ocho registros, filtrable por tema y episodio: cinco fotografías y tres fichas documentales sobre Tumbes, Piura, Lambayeque y el sector La Campiña del río Moche, en La Libertad.
+- Lectura desplegable de la experiencia: significado de la calma, la memoria, el retorno y la participación del visitante.
 - Carga de imágenes y videos con título, ubicación, año, tema y autoría; vista previa y eliminación con confirmación.
-- Línea de memoria de 1983, 1998, 2017 y una reflexión sobre el presente.
+- Línea de memoria de 1982–1983, 1997–1998, 2017 y 2023, con fuentes directas por episodio y una reflexión sobre el presente. Comienza en 1983. Distingue las lluvias vinculadas a Yaku de los episodios de El Niño.
 - Documentos PDF originales, créditos, navegación por teclado y diseño adaptable.
 
 ## Añadir material
@@ -38,7 +39,7 @@ Desde **«Añadir al archivo»** se pueden incorporar imágenes JPG, PNG, WebP, 
 
 Los archivos se conservan en **IndexedDB, únicamente en el navegador que los añade**. Persisten al recargar, pero no se suben a un servidor ni se comparten entre integrantes. Eliminar los datos del sitio elimina esta colección local. El almacenamiento puede estar limitado o no disponible en navegación privada. Para un archivo colaborativo se necesitarían almacenamiento remoto, autenticación y un flujo de publicación.
 
-Para incorporar una entrada permanente para todo el equipo, añade su recurso autorizado en `public/images/` y sus datos en `src/documentary.js`. Identifica los registros documentales con su autoría, fecha, lugar y licencia; mantén diferenciada la interpretación artística de portada.
+Para incorporar una entrada permanente para todo el equipo, añade su recurso autorizado en `public/images/` y sus datos en `src/documentary.js`. Las fichas de fuentes sin fotografía y las entradas de la línea de tiempo se mantienen en `src/research.js`. Identifica los registros documentales con su autoría, fecha, lugar y licencia; mantén diferenciada la interpretación artística de portada.
 
 ## Contenido y procedencia
 
@@ -46,7 +47,14 @@ Los dos PDF originales se encuentran en `public/docs/`. La página sintetiza el 
 
 La portada combina `river-delta.png` y `river-territory.png`, imágenes artísticas generadas con IA, para representar el paso entre tierra y agua: **no son registros documentales de Piura, una comparación real de antes y después ni una simulación climática**. El audio es sintetizado y solo se activa tras una acción del visitante.
 
-El Archivo vivo contiene tres fotografías reales de Piura de marzo de 2017, tomadas de los reportajes fotográficos de la **Galería del Ministerio de Defensa del Perú**, a través de Wikimedia Commons, con licencia **[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)**. Cada tarjeta muestra el crédito; su vista ampliada incluye fecha de la toma, imagen completa, autoría, licencia y enlaces al reportaje original y a noticias de contexto de BBC News o RPP / Mongabay. Las noticias aportan contexto: no se atribuyen las fotografías a esos medios.
+El Archivo vivo contiene **cinco fotografías y tres fichas documentales**:
+
+- **1982–1983, Tumbes:** ficha basada en la investigación de Karen Beatriz León Altuna (UNALM, 2014), disponible en el [repositorio IGP](https://repositorio.igp.gob.pe/items/7128bbec-a456-4bc8-b3a8-c0ba4a8bcf17). Se revisaron tanto el resumen como el PDF original.
+- **1997–1998, Lambayeque:** ficha basada en el [consolidado de daños de INDECI](https://portal.indeci.gob.pe/wp-content/uploads/2019/01/3.4_cons.pdf), revisado en sus páginas escaneadas. **Piura:** fotografía del antiguo puente Bolognesi atribuida a Alfredobi y [declarada de dominio público en Commons](https://commons.wikimedia.org/wiki/File:Puente_Bolognesi_destruido.JPG). La fecha de toma no está indicada. El 10 de febrero de 2006 es la fecha de subida; la imagen se presenta como huella del colapso de 1998, no como una toma de ese año.
+- **2017, Piura:** las tres fotografías originales del Ministerio de Defensa, con contexto de BBC News y RPP / Mongabay.
+- **2023, Tumbes:** fotografía del Ministerio de Defensa, tomada el 10 de marzo. **La Campiña, Moche, La Libertad:** ficha basada en el reportaje de Infobae del 13 de marzo. El [comunicado de SENAMHI del 7 de marzo](https://www.gob.pe/institucion/senamhi/noticias/721545-ciclon-yaku-se-presenta-frente-al-mar-peruano) contextualiza la influencia de Yaku en las lluvias. Se indica expresamente que Yaku y El Niño son fenómenos distintos.
+
+Las cuatro fotografías del Ministerio de Defensa se usan con licencia **[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)** a través de Wikimedia Commons. Cada tarjeta y diálogo mantiene su crédito, contexto, fecha disponible y fuentes. Las noticias aportan contexto; no se atribuyen a los medios las fotografías institucionales. Las fichas sin fotografía utilizan composiciones tipográficas identificadas como fichas documentales, sin reutilizar imágenes de otros años.
 
 Las fotografías se sirven localmente desde `public/images/documental/`, sin retoques ni filtros de color. Las miniaturas adaptan el encuadre con CSS; el diálogo conserva la fotografía completa. `public/images/documental/credits.json` registra para cada archivo el título original, fecha, autor, fuentes, versión descargada, licencia y suma SHA-256. Los recursos artísticos de portada se mantienen diferenciados de las fotografías documentales.
 
@@ -59,6 +67,8 @@ La referencia proporcionada fue [Unsupervised, de Refik Anadol](https://refikana
 - `src/motion.js` y `src/motion.css`: transiciones con GSAP, entradas al desplazarse, avance de lectura y control del movimiento. Las vistas salientes son copias visuales inertes sin IDs duplicados; se retiran al terminar o interrumpir el efecto. Los cambios rápidos priorizan la última selección y el contenido permanece legible si se cancelan los efectos.
 - `src/archive.js`: archivo, persistencia local, carga de medios, fuentes y diálogos.
 - `src/documentary.js`: fotografías documentales, contexto, autoría, fechas, licencias y enlaces al reportaje original.
+- `src/research.js`: fichas documentales, fuentes verificadas y relatos de la línea de tiempo.
+- `src/context.css`: lectura de la obra, fichas de fuentes y filtro por episodio.
 - `src/style.css`: diseño visual y adaptación a móvil.
 - `tests/experience.spec.js`: comprobación de los flujos principales.
 
@@ -91,4 +101,4 @@ La autorización de la CLI se completó mediante el flujo de dispositivo de Verc
 
 El proyecto de Vercel está conectado al repositorio de GitHub. Guarda los cambios en Git y súbelos a `main` para que los siguientes despliegues desde GitHub utilicen la versión actualizada.
 
-La suite incluye 19 pruebas de navegador: pausa, respuesta al cursor, estados intermedios entre escenas, recorrido del marcador de año, clics rápidos, activación voluntaria con movimiento reducido y accesibilidad automática. El archivo de medios sigue siendo local a cada navegador incluso después de publicar la página.
+La suite incluye 21 pruebas de navegador: pausa, respuesta al cursor, estados intermedios entre escenas, recorrido del marcador de año, clics rápidos, activación voluntaria con movimiento reducido, filtros combinados de tema y episodio, contexto y derechos de los registros históricos, fuentes de la línea de tiempo y accesibilidad automática. El archivo de medios sigue siendo local a cada navegador incluso después de publicar la página.

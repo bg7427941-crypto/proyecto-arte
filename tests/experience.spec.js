@@ -1,5 +1,9 @@
 import { test, expect } from '@playwright/test';
 import path from 'node:path';
+import { documentaryRecords } from '../src/documentary.js';
+import { researchRecords } from '../src/research.js';
+
+const archiveSize = documentaryRecords.length + researchRecords.length;
 
 test('la portada y sus recursos locales cargan sin errores', async ({ page }) => {
   const errors = [];
@@ -8,9 +12,10 @@ test('la portada y sus recursos locales cargan sin errores', async ({ page }) =>
   page.on('response', response => { if (response.url().startsWith('http://127.0.0.1:5173') && response.status() >= 400) failures.push(response.url()); });
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('La ilusión de habitar al margen.');
-  await expect(page.locator('.archive-card')).toHaveCount(3);
+  await expect(page.locator('.archive-card')).toHaveCount(archiveSize);
   await page.evaluate(() => document.fonts.ready);
   await page.locator('.archive-card').first().scrollIntoViewIfNeeded();
+  for (const image of await page.locator('.card-image img').all()) await image.scrollIntoViewIfNeeded();
   await expect.poll(() => page.locator('.card-image img').evaluateAll(images => images.every(img => img.complete && img.naturalWidth > 0))).toBe(true);
   await page.evaluate(() => scrollTo(0, 0));
   await page.evaluate(() => Promise.all(document.getAnimations()
@@ -52,7 +57,7 @@ test('se puede pausar, ampliar y activar el sonido con una acción explícita', 
 test('el archivo filtra y muestra el contexto, la fecha y los derechos de una fotografía documental', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Memoria', exact: true }).click();
-  await expect(page.locator('.archive-card')).toHaveCount(1);
+  await expect(page.locator('.archive-card')).toHaveCount(2);
   await page.getByRole('button', { name: /2017: cruzar en medio del agua/ }).click();
   await expect(page.getByRole('dialog')).toBeVisible();
   await expect(page.getByRole('dialog')).toContainText('28 de marzo de 2017');
@@ -63,8 +68,8 @@ test('el archivo filtra y muestra el contexto, la fecha y los derechos de una fo
   await expect(page.locator('.detail-sources').getByRole('link')).toHaveCount(3);
   await page.keyboard.press('Escape');
   await expect(page.getByRole('dialog')).not.toBeVisible();
-  await page.getByRole('button', { name: 'Todo 3' }).click();
-  await expect(page.locator('.archive-card')).toHaveCount(3);
+  await page.getByRole('button', { name: `Todo ${archiveSize}` }).click();
+  await expect(page.locator('.archive-card')).toHaveCount(archiveSize);
 });
 
 test('las fuentes originales están disponibles como PDF y el diálogo cierra con teclado', async ({ page, request }) => {
@@ -97,12 +102,14 @@ test('una imagen se guarda, persiste tras recargar y se puede eliminar', async (
   await page.getByLabel('Lugar', { exact: true }).fill('Catacaos');
   await page.getByLabel('Autoría o fuente').fill('Equipo del proyecto');
   await page.getByLabel('Tema', { exact: true }).selectOption('Memoria');
-  await page.getByLabel('Año del registro').fill('2017');
+  await page.getByLabel('Año del registro').fill('1990');
   await expect(page.locator('.upload-preview')).toBeVisible();
   await page.getByRole('button', { name: 'Añadir al archivo', exact: true }).last().click();
   await expect(page.getByRole('dialog')).not.toBeVisible();
-  await expect(page.locator('.archive-card')).toHaveCount(4);
+  await expect(page.locator('.archive-card')).toHaveCount(archiveSize + 1);
   await page.reload();
+  await page.getByRole('combobox', { name: 'Episodio', exact: true }).selectOption('1990');
+  await expect(page.locator('.archive-card')).toHaveCount(1);
   const uploaded = page.getByRole('button', { name: /Registro de prueba <Piura>/ });
   await expect(uploaded).toBeVisible();
   await uploaded.click();
@@ -110,9 +117,9 @@ test('una imagen se guarda, persiste tras recargar y se puede eliminar', async (
   await expect(page.getByRole('dialog')).toContainText('Equipo del proyecto');
   await page.getByRole('button', { name: 'Eliminar este archivo de mi navegador' }).click();
   await page.getByRole('button', { name: 'Sí, eliminar' }).click();
-  await expect(page.locator('.archive-card')).toHaveCount(3);
+  await expect(page.locator('.archive-card')).toHaveCount(archiveSize);
   await page.reload();
-  await expect(page.locator('.archive-card')).toHaveCount(3);
+  await expect(page.locator('.archive-card')).toHaveCount(archiveSize);
 });
 
 test('se rechazan archivos que no son imágenes o videos', async ({ page }) => {
@@ -122,7 +129,7 @@ test('se rechazan archivos que no son imágenes o videos', async ({ page }) => {
   await expect(page.locator('#file-error')).toContainText('Elige una imagen');
   await expect(page.locator('.upload-preview')).toHaveCount(0);
   await page.keyboard.press('Escape');
-  await expect(page.locator('.archive-card')).toHaveCount(3);
+  await expect(page.locator('.archive-card')).toHaveCount(archiveSize);
 });
 
 test('se puede añadir y reproducir un video WebM', async ({ page }) => {

@@ -1,11 +1,32 @@
+import { researchSources } from './research.js';
+
 const author = 'Galería del Ministerio de Defensa del Perú';
 const license = { name: 'CC BY 2.0', url: 'https://creativecommons.org/licenses/by/2.0/' };
 const news = { label: 'BBC News · Desborde del río Piura (28 de marzo de 2017, en inglés)', url: 'https://www.bbc.com/news/world-latin-america-39418314' };
 const explanation = { label: 'RPP / Mongabay · Cinco preguntas sobre El Niño costero (1 de abril de 2017)', url: 'https://rpp.pe/blog/mongabay/5-preguntas-para-entender-el-fenomeno-el-nino-costero-que-golpea-peru-noticia-1038554' };
-
-// Las fechas son las de la toma, según DateTimeOriginal del archivo de origen.
+// Fecha de toma cuando está disponible; el registro del puente solo tiene fecha de subida.
 // Las fotografías se conservan sin alteración. Solo la miniatura adapta el encuadre.
 export const documentaryRecords = [
+  {
+    id: 'puente-bolognesi-1998', kind: 'documentary',
+    title: '1998: la ausencia de un puente', category: 'Territorio', location: 'Piura, Perú', year: '1998', period: '1997–1998',
+    image: '/images/documental/piura-puente-bolognesi-huella-1998.jpg',
+    alt: 'Tramo interrumpido del antiguo puente Bolognesi sobre el río Piura, visto desde una de sus orillas.',
+    subtitle: 'Una huella del colapso de 1998 · La ficha no indica la fecha de la toma.',
+    displayDate: 'Huella del episodio de 1997–1998 · fecha de toma no indicada',
+    caption: 'Antiguo puente Bolognesi, identificado en Wikimedia Commons como destruido durante El Niño de 1998. Fotografía atribuida a Alfredobi.',
+    description: 'La ficha de Wikimedia Commons identifica este registro como el antiguo puente Bolognesi, destruido durante El Niño de 1998 en Piura. La interrupción del puente hace visible una ausencia: la conexión entre dos orillas que dejó de funcionar.\n\nLa fecha exacta de la toma no figura en la fuente. El 10 de febrero de 2006 es la fecha de subida del archivo, no una fecha que podamos atribuir a la fotografía. Por eso se presenta como registro de una huella de 1998, no como una imagen tomada durante la emergencia.\n\n¿Qué ocurre con la vida cotidiana de una ciudad cuando sus conexiones se rompen? La memoria del agua también puede leerse en lo que falta.',
+    disclosure: 'Episodio documentado: 1997–1998. Fecha de toma no indicada; archivo subido a Commons en 2006. La fuente atribuye la imagen a Alfredobi y la declara de dominio público. Se conserva sin retoques.',
+    credit: 'Alfredobi · Wikimedia Commons',
+    cardCredit: 'Foto: Alfredobi · Dominio público',
+    license: { name: 'Dominio público', url: 'https://commons.wikimedia.org/wiki/File:Puente_Bolognesi_destruido.JPG#Licensing' },
+    originalUrl: 'https://commons.wikimedia.org/wiki/File:Puente_Bolognesi_destruido.JPG',
+    commonsUrl: 'https://commons.wikimedia.org/wiki/File:Puente_Bolognesi_destruido.JPG',
+    sources: [
+      { label: 'Ficha de la fotografía, procedencia y declaración de dominio público · Commons', url: 'https://commons.wikimedia.org/wiki/File:Puente_Bolognesi_destruido.JPG' },
+      researchSources.damage,
+    ],
+  },
   {
     id: 'territorio', kind: 'documentary',
     title: 'Cuando el camino desaparece', category: 'Territorio', location: 'Piura, Perú', year: '2017',
@@ -61,6 +82,25 @@ export const documentaryRecords = [
       { label: 'Reportaje fotográfico original · Ministerio de Defensa del Perú', url: 'https://www.flickr.com/photos/ministeriodedefensaperu/33493214735/' },
       { label: 'Ficha de la fotografía y licencia · Wikimedia Commons', url: 'https://commons.wikimedia.org/w/index.php?curid=57710504' },
       explanation,
+    ],
+  },
+  {
+    id: 'tumbes-2023', kind: 'documentary',
+    title: '2023: Tumbes vuelve a caminar entre el agua', category: 'Prevención', location: 'Tumbes, Perú', year: '2023',
+    image: '/images/documental/tumbes-lluvias-2023.jpg',
+    alt: 'Una calle de Tumbes cubierta de agua, con mototaxis, camiones y comercios a ambos lados.',
+    subtitle: '10 de marzo de 2023 · La lluvia transforma la movilidad y el comercio.',
+    date: '2023-03-10', displayDate: '10 de marzo de 2023',
+    caption: 'Calle inundada en Tumbes durante la cobertura del Ministerio de Defensa de las lluvias intensas del 10 de marzo de 2023.',
+    description: 'Mototaxis y camiones recorren una calle cubierta de agua entre comercios de Tumbes. La toma pertenece al reportaje institucional sobre las lluvias intensas del 10 de marzo de 2023.\n\nTres días antes, SENAMHI explicó que el ciclón Yaku influía en las lluvias extremas de Tumbes, Piura y Lambayeque. Ese comunicado aporta el contexto meteorológico de la temporada; la fotografía muestra una situación urbana concreta. Yaku y El Niño son fenómenos distintos.\n\nEste caso amplía la pregunta hacia otra localidad y otro año: ¿cómo sostener la movilidad, el trabajo y el cuidado cotidiano cuando la calle se convierte en un espacio inundado?',
+    disclosure: 'Fotografía documental de Tumbes, tomada el 10 de marzo de 2023 según la ficha de origen. No se atribuye a una calle o barrio que la fuente no identifica, ni se presenta como un registro de 2017.',
+    credit: 'Ministerio de Defensa del Perú', license,
+    originalUrl: 'https://www.flickr.com/photos/ministeriodedefensaperu/52738280667/',
+    commonsUrl: 'https://commons.wikimedia.org/wiki/File:MINISTRO_DE_DEFENSA_REALIZA_VISITA_DE_INSPECCI%C3%93N_A_ZONAS_AFECTADAS_POR_LLUVIAS_INTENSAS_EN_TUMBES_(52738280667).jpg',
+    sources: [
+      { label: 'Reportaje fotográfico original · Ministerio de Defensa del Perú', url: 'https://www.flickr.com/photos/ministeriodedefensaperu/52738280667/' },
+      { label: 'Ficha de la fotografía y licencia · Wikimedia Commons', url: 'https://commons.wikimedia.org/wiki/File:MINISTRO_DE_DEFENSA_REALIZA_VISITA_DE_INSPECCI%C3%93N_A_ZONAS_AFECTADAS_POR_LLUVIAS_INTENSAS_EN_TUMBES_(52738280667).jpg' },
+      researchSources.yaku,
     ],
   },
 ];

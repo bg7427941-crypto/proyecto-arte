@@ -1,12 +1,15 @@
 import { icon } from './icons.js';
-import { documentaryRecords as originals } from './documentary.js';
+import { documentaryRecords } from './documentary.js';
+import { researchRecords, researchSources } from './research.js';
 import { observeReveals, transitionContent } from './motion.js';
 
 const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
-
+const originals = [...documentaryRecords, ...researchRecords].sort((a, b) => Number(a.year) - Number(b.year));
+const periodLabels = { '1983': '1982–1983', '1998': '1997–1998' };
 
 let records = [];
 let filter = 'Todo';
+let period = 'Todo';
 let dbPromise;
 let modalCleanup;
 const objectUrls = new Map();
@@ -60,18 +63,24 @@ function mediaUrl(record) {
 function render({ reveal = true } = {}) {
   const all = [...originals, ...records];
   document.querySelector('#archive-count').textContent = all.length;
-  const visible = all.filter(record => filter === 'Todo' || record.category === filter);
+  const periodSelect = document.querySelector('#archive-period');
+  const years = [...new Set(all.map(record => record.year).filter(Boolean))].sort();
+  if (period !== 'Todo' && !years.includes(period)) period = 'Todo';
+  periodSelect.innerHTML = `<option value="Todo">Todos los años</option>${years.map(year => `<option value="${escapeHtml(year)}">${periodLabels[year] || escapeHtml(year)}</option>`).join('')}`;
+  periodSelect.value = period;
+  const visible = all.filter(record => (filter === 'Todo' || record.category === filter) && (period === 'Todo' || record.year === period));
+  document.querySelector('#archive-result').textContent = `${visible.length} de ${all.length} registros · ${filter === 'Todo' ? 'Todos los temas' : filter} · ${period === 'Todo' ? 'Todos los años' : periodLabels[period] || period}`;
   document.querySelector('#archive-grid').innerHTML = visible.length ? visible.map(record => `
     <button class="archive-card" data-record="${escapeHtml(record.id)}" data-kind="${record.kind || 'local'}">
       <div class="card-image">
-        ${record.file?.type.startsWith('video/') ? `<video src="${mediaUrl(record)}" poster="/images/video-cover.svg" preload="metadata" muted playsinline aria-hidden="true"></video>` : `<img src="${mediaUrl(record)}" alt="" loading="lazy" width="600" height="365">`}
-        <span class="card-type">${icon(record.file?.type.startsWith('video/') ? 'play' : 'image')}${record.file ? record.file.type.startsWith('video/') ? 'VIDEO AÑADIDO' : 'IMAGEN AÑADIDA' : record.kind === 'documentary' ? 'FOTOGRAFÍA DOCUMENTAL' : 'ESTUDIO VISUAL'}</span>
+        ${record.kind === 'research' ? `<div class="research-cover" aria-hidden="true"><span>${escapeHtml(record.period || record.year)}</span><p>${escapeHtml(record.location)}</p><small>UNA HUELLA EN EL ARCHIVO</small></div>` : record.file?.type.startsWith('video/') ? `<video src="${mediaUrl(record)}" poster="/images/video-cover.svg" preload="metadata" muted playsinline aria-hidden="true"></video>` : `<img src="${mediaUrl(record)}" alt="" loading="lazy" width="600" height="365">`}
+        <span class="card-type">${icon(record.file?.type.startsWith('video/') ? 'play' : 'image')}${record.file ? record.file.type.startsWith('video/') ? 'VIDEO AÑADIDO' : 'IMAGEN AÑADIDA' : record.kind === 'documentary' ? 'FOTOGRAFÍA DOCUMENTAL' : 'FICHA DOCUMENTAL'}</span>
         <span class="card-open">${icon('arrow')}</span>
       </div>
       <div class="card-meta"><span>${escapeHtml(record.category)}</span><span class="meta-dot"></span><span>${escapeHtml(record.location)}</span></div>
       <h3>${escapeHtml(record.title)}</h3><p class="card-subtitle">${escapeHtml(record.subtitle || record.description || record.year || 'Archivo de la comunidad').slice(0, 180)}</p>
-      ${record.kind === 'documentary' ? '<p class="card-credit">Foto: Ministerio de Defensa del Perú · CC BY 2.0</p>' : ''}
-    </button>`).join('') : '<p class="empty-state">Todavía no hay fragmentos en este tema. Puedes añadir el primero.</p>';
+      ${record.credit ? `<p class="card-credit">${escapeHtml(record.cardCredit || `${record.kind === 'documentary' ? 'Foto: ' : 'Fuente: '}${record.credit}${record.license ? ` · ${record.license.name}` : ''}`)}</p>` : ''}
+    </button>`).join('') : '<p class="empty-state">No hay registros para esta combinación. Prueba con otro tema o con todos los años.</p>';
   if (reveal) observeReveals(document.querySelectorAll('.archive-card'), 80);
   document.querySelectorAll('[data-record]').forEach(button => button.addEventListener('click', () => {
     const record = all.find(item => item.id === button.dataset.record);
@@ -92,7 +101,7 @@ function sourceLinks(sources) {
 function openDetail(record) {
   const isVideo = record.file?.type.startsWith('video/');
   openDialog(`
-    <div class="detail-media">${isVideo ? `<video src="${mediaUrl(record)}" controls playsinline preload="metadata"></video>` : `<img src="${mediaUrl(record)}" alt="${escapeHtml(record.alt || record.title)}">`}</div>
+    ${record.kind === 'research' ? `<div class="research-cover research-detail"><span>${escapeHtml(record.period || record.year)}</span><p>${escapeHtml(record.location)}</p><small>FICHA DOCUMENTAL / LECTURA DE FUENTES</small></div>` : `<div class="detail-media">${isVideo ? `<video src="${mediaUrl(record)}" controls playsinline preload="metadata"></video>` : `<img src="${mediaUrl(record)}" alt="${escapeHtml(record.alt || record.title)}">`}</div>`}
     ${record.caption ? `<p class="photo-caption">${escapeHtml(record.caption)}</p>` : ''}
     <div class="dialog-padding"><p class="eyebrow">ARCHIVO VIVO / ${escapeHtml(record.category.toUpperCase())}</p>
       <h2 id="dialog-title">${escapeHtml(record.title)}</h2>
@@ -211,6 +220,7 @@ function openUpload() {
       await writeMedia('put', record);
       records.push(record);
       filter = 'Todo';
+      period = 'Todo';
       updateFilters();
       document.querySelector('#content-dialog').close();
       render();
@@ -232,7 +242,7 @@ function updateFilters() {
 }
 
 export function openSources() {
-  openDialog(`<div class="dialog-padding"><p class="eyebrow">EL PROYECTO / FUENTES Y CRÉDITOS</p><h2 id="dialog-title">Detrás de <em>la pregunta.</em></h2><p class="dialog-copy">La página interpreta los dos documentos del equipo y los acompaña con fotografías documentales de la emergencia de 2017. Los textos de la página son una síntesis editorial; las referencias se conservan para que puedas ampliar y contrastar la investigación.</p>
+  openDialog(`<div class="dialog-padding"><p class="eyebrow">EL PROYECTO / FUENTES Y CRÉDITOS</p><h2 id="dialog-title">Detrás de <em>la pregunta.</em></h2><p class="dialog-copy">La página interpreta los dos documentos del equipo y amplía el recorrido a Tumbes, Piura, Lambayeque y La Libertad. Reúne fotografías y fichas documentales sobre 1982–1983, 1997–1998, 2017 y las lluvias de 2023. Los textos son una síntesis editorial; cada caso conserva sus referencias.</p>
     <ul class="source-list">
       <li><span>DOCUMENTO BASE · PDF</span><a href="/docs/la-ilusion-de-habitar-al-margen.pdf" target="_blank" rel="noopener">La ilusión de habitar al margen ${icon('arrow')}</a><p>Análisis cultural e institucional ante el fenómeno El Niño en la costa norte. Equipo del proyecto, 2026.</p></li>
       <li><span>INVESTIGACIÓN INICIAL · PDF</span><a href="/docs/calentamiento-global-y-vulnerabilidad-en-piura.pdf" target="_blank" rel="noopener">Calentamiento global y vulnerabilidad en Piura ${icon('arrow')}</a><p>Impacto de El Niño en las comunidades y desafíos para la prevención. Equipo del proyecto, 2026.</p></li>
@@ -241,8 +251,9 @@ export function openSources() {
       <li><span>EL CICLO DEL AGUA</span><a href="https://www.usgs.gov/special-topics/water-science-school/science/el-ciclo-del-agua-water-cycle-spanish" target="_blank" rel="noopener noreferrer">U.S. Geological Survey ${icon('arrow')}</a><p>Referencia conceptual sobre el movimiento continuo del agua.</p></li>
     </ul>
     <p class="detail-disclosure">Los PDF incluyen también referencias periodísticas de 2026 que no se han verificado de forma independiente para esta página. No se presentan sus cifras como datos comprobados ni se ofrece un pronóstico de El Niño.</p>
-    <div class="detail-sources"><h3>FOTOGRAFÍAS DOCUMENTALES · PIURA, 2017</h3><p class="dialog-copy">Galería del Ministerio de Defensa del Perú. Fotografías utilizadas con licencia <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener noreferrer">CC BY 2.0</a>, a través de Wikimedia Commons. Cada ficha enlaza al reportaje original, su licencia y una noticia de contexto. Se conservan los colores y la imagen completa en la vista ampliada.</p>${sourceLinks(originals.map(record => ({label: `${record.title} · ${record.displayDate}`, url: record.originalUrl})))}</div>
-    <div class="credits"><h3>Arte y Tecnología · UTEC · 2026</h3><p>Sebastian Daniel Cangalaya Martinez · Jenny Melisa Díaz Alarcón · Bruno William Garcia López · Diego Leonel Cardenas Quijaite · Giovanni Ticse (investigación inicial).</p><p>Docente: Isabel del Carmen Collazos Ticona.</p><p>Imágenes de paisaje: estudios artísticos generados con IA. Animación creada para esta experiencia. El paisaje interactivo de portada es una interpretación artística. Las tres fotografías de Archivo vivo son registros documentales de Piura de marzo de 2017 y conservan su crédito y licencia. Audio: textura ambiental sintetizada, no grabación de campo.</p><p>Referencia propuesta por el equipo: <a href="https://refikanadol.com/works/unsupervised/" target="_blank" rel="noopener noreferrer"><u>Unsupervised, Refik Anadol</u></a>. Esta página es una interpretación independiente y no reproduce la obra ni sus recursos.</p><p>El archivo añadido por visitantes se conserva únicamente en su propio navegador. No existe publicación compartida en esta versión.</p></div>
+    <div class="detail-sources"><h3>FUENTES DEL RECORRIDO · 1982–2023</h3>${sourceLinks(Object.values(researchSources))}<p class="dialog-copy">La investigación de León Altuna aporta el contexto de Tumbes y Piura en 1982–1983 y 1997–1998. INDECI documenta los daños de 1997–1998. SENAMHI y la cobertura del río Moche contextualizan las lluvias de marzo de 2023. Yaku y El Niño son fenómenos distintos.</p></div>
+    <div class="detail-sources"><h3>FOTOGRAFÍAS Y FICHAS DEL ARCHIVO</h3><p class="dialog-copy">Las fotografías de Piura en 2017 y Tumbes en 2023 proceden del Ministerio de Defensa del Perú, con licencia <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener noreferrer">CC BY 2.0</a>. El registro del antiguo puente Bolognesi se atribuye a Alfredobi y está declarado de dominio público en Commons; su fecha de toma no está indicada. Las tres fichas de fuentes usan composiciones tipográficas identificadas como tales. Cada entrada conserva su propia procedencia.</p>${sourceLinks(originals.map(record => ({label: `${record.title} · ${record.displayDate}`, url: record.originalUrl})))}</div>
+    <div class="credits"><h3>Arte y Tecnología · UTEC · 2026</h3><p>Sebastian Daniel Cangalaya Martinez · Jenny Melisa Díaz Alarcón · Bruno William Garcia López · Diego Leonel Cardenas Quijaite · Giovanni Ticse (investigación inicial).</p><p>Docente: Isabel del Carmen Collazos Ticona.</p><p>Imágenes de paisaje: estudios artísticos generados con IA. Animación creada para esta experiencia. El paisaje interactivo de portada es una interpretación artística. Las cinco fotografías del Archivo vivo conservan su autoría y sus condiciones de uso; las fichas documentales indican sus fuentes. Audio: textura ambiental sintetizada, no grabación de campo.</p><p>Referencia propuesta por el equipo: <a href="https://refikanadol.com/works/unsupervised/" target="_blank" rel="noopener noreferrer"><u>Unsupervised, Refik Anadol</u></a>. Esta página es una interpretación independiente y no reproduce la obra ni sus recursos.</p><p>El archivo añadido por visitantes se conserva únicamente en su propio navegador. No existe publicación compartida en esta versión.</p></div>
   </div>`);
 }
 
@@ -268,6 +279,10 @@ export function initArchive() {
     transitionContent(document.querySelector('.archive-transition'), () => render({ reveal: false }), { direction, distance: 36, duration: .7 });
   }));
   document.querySelectorAll('.add-media').forEach(button => button.addEventListener('click', openUpload));
+  document.querySelector('#archive-period').addEventListener('change', event => {
+    period = event.target.value;
+    transitionContent(document.querySelector('.archive-transition'), () => render({ reveal: false }), { distance: 36, duration: .7 });
+  });
   render();
   readMedia().then(saved => { records = saved.sort((a, b) => a.createdAt - b.createdAt); render(); }).catch(() => {
     notify('El almacenamiento local no está disponible. Puedes explorar las fotografías documentales.');

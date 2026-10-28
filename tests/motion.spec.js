@@ -21,7 +21,7 @@ test('las transiciones del archivo terminan y la lectura progresa al bajar', asy
   await page.goto('/');
   const initial = await page.locator('.reading-progress').evaluate(element => element.getBoundingClientRect().width);
   await page.getByRole('button', { name: 'Memoria', exact: true }).click();
-  const card = page.locator('.archive-card');
+  const card = page.locator('.archive-card[data-record="memoria"]');
   await expect(card).toHaveCount(1);
   await expect(card).toContainText('2017: cruzar en medio del agua');
   await expect.poll(() => card.evaluate(element => getComputedStyle(element).opacity)).toBe('1');
@@ -43,8 +43,8 @@ test('reducir movimiento detiene los efectos nuevos y mantiene todo el contenido
   await expect(page.locator('#story-title')).toHaveText('La prevención empieza antes del retorno.');
   await expect(page.locator('.timeline-story')).toHaveCSS('opacity', '1');
   await page.getByRole('button', { name: 'Memoria', exact: true }).click();
-  await expect(page.locator('.archive-card')).toHaveCSS('opacity', '1');
-  expect(await page.locator('.archive-card').evaluate(element => element.getAnimations().length)).toBe(0);
+  await expect(page.locator('.archive-card').first()).toHaveCSS('opacity', '1');
+  expect(await page.locator('.archive-card').first().evaluate(element => element.getAnimations().length)).toBe(0);
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.locator('.artwork').scrollIntoViewIfNeeded();
   await expect(page.getByRole('button', { name: 'Pausar animación' })).toBeVisible();
@@ -64,8 +64,12 @@ test('entre memoria y calma el paisaje se transforma y la vista anterior sale mi
   const intermediate = await land.evaluate(element => Number(getComputedStyle(element).opacity));
   expect(intermediate).toBeGreaterThan(.5);
   expect(intermediate).toBeLessThan(.97);
-  await page.getByRole('tab', { name: '01 La calma' }).evaluate(element => element.click());
-  expect(await land.evaluate(element => Number(getComputedStyle(element).opacity))).toBeCloseTo(intermediate, 1);
+  const sameFrame = await land.evaluate(element => {
+    const before = Number(getComputedStyle(element).opacity);
+    document.querySelector('[data-stage="0"]').click();
+    return { before, after: Number(getComputedStyle(element).opacity) };
+  });
+  expect(sameFrame.after).toBeCloseTo(sameFrame.before, 3);
   expect(await page.locator('.cycle-indicator').evaluate(element => element.getBoundingClientRect().x)).toBeLessThan(indicatorBefore);
   await expect.poll(() => land.evaluate(element => Number(getComputedStyle(element).opacity))).toBeCloseTo(.98, 2);
   await expect(page.locator('.stage-copy .transition-leaving')).toHaveCount(0);
@@ -75,6 +79,8 @@ test('entre memoria y calma el paisaje se transforma y la vista anterior sale mi
 test('el marcador de año recorre la línea y los cambios rápidos conservan solamente la última vista', async ({ page }) => {
   await page.goto('/');
   await page.locator('.timeline').scrollIntoViewIfNeeded();
+  await page.getByRole('button', { name: '2017', exact: true }).click();
+  await expect(page.locator('.timeline-story .transition-leaving')).toHaveCount(0);
   const marker = page.locator('.timeline-marker');
   const start = await marker.evaluate(element => element.getBoundingClientRect().x);
   await page.getByRole('button', { name: '1983', exact: true }).evaluate(element => element.click());

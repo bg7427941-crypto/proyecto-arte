@@ -1,5 +1,6 @@
 import { icon } from './icons.js';
-import { animateEntry, setMotionPaused } from './motion.js';
+import { gsap } from 'gsap';
+import { transitionContent, tween, setMotionPaused, motionAllowed } from './motion.js';
 
 export function initArtwork() {
   const artwork = document.querySelector('.artwork');
@@ -8,9 +9,13 @@ export function initArtwork() {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const pauseButton = document.querySelector('#pause-art');
   const expandButton = document.querySelector('#expand-art');
+  const scene = document.querySelector('.artwork-scene');
+  const land = document.querySelector('.artwork-land');
+  const indicator = document.querySelector('.cycle-indicator');
   let paused = reducedMotion.matches;
   let inView = true;
   let stage = 2;
+  let stageInitialized = false;
   let width = 1;
   let height = 1;
   let particles = [];
@@ -22,10 +27,11 @@ export function initArtwork() {
   let driftY = 0;
   const ripples = [];
   const stages = [
-    { title: 'La calma también<br><em>es parte del ciclo.</em>', caption: 'LA CALMA', description: 'La tierra parece inmóvil. El ciclo no se detiene.', speed: .35 },
-    { title: 'Lo que el territorio<br><em>no olvida.</em>', caption: 'LA MEMORIA', description: 'Las huellas del agua permanecen, aunque dejemos de mirarlas.', speed: .7 },
-    { title: 'El agua siempre<br><em>regresa.</em>', caption: 'EL RETORNO', description: 'El paisaje cambia. Nuestra relación con él, también.', speed: 1.15 },
+    { title: 'La calma también<br><em>es parte del ciclo.</em>', caption: 'LA CALMA', description: 'La tierra parece inmóvil. El ciclo no se detiene.', land: .98, scale: 1.08, x: -2, y: 1, flow: { speed: .18, turbulence: .3, red: 243, green: 225, blue: 183 } },
+    { title: 'Lo que el territorio<br><em>no olvida.</em>', caption: 'LA MEMORIA', description: 'Las huellas del agua permanecen, aunque dejemos de mirarlas.', land: .48, scale: 1.2, x: 2, y: -2, flow: { speed: .75, turbulence: .7, red: 207, green: 226, blue: 206 } },
+    { title: 'El agua siempre<br><em>regresa.</em>', caption: 'EL RETORNO', description: 'El paisaje cambia. Nuestra relación con él, también.', land: 0, scale: 1, x: 0, y: 0, flow: { speed: 1.4, turbulence: 1.2, red: 183, green: 232, blue: 224 } },
   ];
+  const flow = { ...stages[stage].flow };
 
   function newParticle() {
     return { x: Math.random() * width, y: Math.random() * height, age: Math.random() * 160, life: 100 + Math.random() * 130 };
@@ -42,13 +48,13 @@ export function initArtwork() {
     if (paused) drawStill();
   }
   function advance() {
-    time += .006 * stages[stage].speed;
+    time += .006 * flow.speed;
     ctx.globalCompositeOperation = 'destination-out';
     ctx.fillStyle = 'rgba(0,0,0,0.045)';
     ctx.fillRect(0, 0, width, height);
     ctx.globalCompositeOperation = 'source-over';
     ctx.lineWidth = .65;
-    ctx.strokeStyle = stage === 0 ? 'rgba(243,233,193,.16)' : 'rgba(183,232,224,.25)';
+    ctx.strokeStyle = `rgba(${Math.round(flow.red)},${Math.round(flow.green)},${Math.round(flow.blue)},.25)`;
     ctx.beginPath();
     particles.forEach((p, i) => {
       if (p.age++ > p.life || p.x < -10 || p.x > width + 10 || p.y < -10 || p.y > height + 10) {
@@ -58,14 +64,14 @@ export function initArtwork() {
       }
       const nx = p.x / width;
       const ny = p.y / height;
-      let angle = -.6 + Math.sin(nx * 6 + time) * .7 + Math.cos(ny * 6 - time * .6) * 1.3 + Math.sin((nx + ny) * 9) * .5;
+      let angle = -.6 + Math.sin(nx * 6 + time) * .7 + Math.cos(ny * 6 - time * .6) * 1.3 + Math.sin((nx + ny) * 9) * flow.turbulence;
       if (pointer) {
         const dx = pointer.x - p.x;
         const dy = pointer.y - p.y;
         const distance = Math.hypot(dx, dy);
         if (distance < 170) angle += Math.atan2(dy, dx) * (1 - distance / 170) * 1.5;
       }
-      const speed = 1.1 + stages[stage].speed;
+      const speed = .45 + flow.speed;
       ctx.moveTo(p.x, p.y);
       p.x += Math.cos(angle) * speed;
       p.y += Math.sin(angle) * speed;
@@ -91,22 +97,22 @@ export function initArtwork() {
     requestAnimationFrame(frame);
     if (paused || !inView || document.hidden || timestamp - lastFrame < 32) return;
     lastFrame = timestamp;
-    const targetX = pointer && !reducedMotion.matches ? (pointer.x / width - .5) * -24 : 0;
-    const targetY = pointer && !reducedMotion.matches ? (pointer.y / height - .5) * -18 : 0;
+    const targetX = pointer && motionAllowed() ? (pointer.x / width - .5) * -24 : 0;
+    const targetY = pointer && motionAllowed() ? (pointer.y / height - .5) * -18 : 0;
     driftX += (targetX - driftX) * .065;
     driftY += (targetY - driftY) * .065;
     artwork.style.setProperty('--pointer-x', `${driftX.toFixed(2)}px`);
     artwork.style.setProperty('--pointer-y', `${driftY.toFixed(2)}px`);
     advance();
   }
-  function updatePause() {
-    setMotionPaused(paused);
+  function updatePause(userInitiated = false) {
+    setMotionPaused(paused, { userInitiated });
     pauseButton.setAttribute('aria-pressed', String(paused));
     pauseButton.setAttribute('aria-label', paused ? 'Reanudar animación' : 'Pausar animación');
     pauseButton.innerHTML = icon(paused ? 'play' : 'pause');
     pauseButton.title = paused ? 'Reanudar el movimiento de la página' : 'Pausar el movimiento de la página';
   }
-  pauseButton.addEventListener('click', () => { paused = !paused; updatePause(); });
+  pauseButton.addEventListener('click', () => { paused = !paused; updatePause(true); });
   reducedMotion.addEventListener('change', event => { paused = event.matches; updatePause(); });
   artwork.addEventListener('pointermove', event => {
     const rect = artwork.getBoundingClientRect();
@@ -131,23 +137,45 @@ export function initArtwork() {
   }).observe(artwork);
 
   const stageButtons = [...document.querySelectorAll('[data-stage]')];
+  function positionIndicator(immediate = false) {
+    const button = stageButtons[stage];
+    const properties = { x: button.offsetLeft, width: button.offsetWidth };
+    if (immediate) gsap.set(indicator, properties);
+    else tween(indicator, { ...properties, duration: .85, ease: 'power3.inOut', overwrite: true });
+  }
+  new ResizeObserver(() => positionIndicator(true)).observe(indicator.parentElement);
   function setStage(next, focus = false) {
     const changed = stage !== next;
+    if (stageInitialized && !changed) {
+      if (focus) stageButtons[next].focus();
+      return;
+    }
+    stageInitialized = true;
+    const direction = next > stage ? 1 : -1;
     stage = next;
     artwork.dataset.stage = String(stage);
-    document.querySelector('#art-title').innerHTML = stages[stage].title;
+    const updateTitle = () => { document.querySelector('#art-title').innerHTML = stages[stage].title; };
+    if (changed) transitionContent(document.querySelector('.stage-copy'), updateTitle, { direction, distance: 64, duration: .9 });
+    else updateTitle();
     document.querySelector('.art-medium').innerHTML = `ESTUDIO GENERATIVO 001 <span> / </span> ${stages[stage].caption}`;
     document.querySelector('#cycle-description').textContent = stages[stage].description;
     document.querySelector('#cycle-description').setAttribute('aria-labelledby', `stage-${stage}`);
+    const target = stages[stage];
+    const view = { scale: target.scale, xPercent: target.x, yPercent: target.y };
     if (changed) {
-      animateEntry(document.querySelector('#art-title'), { distance: 18, duration: 550 });
-      animateEntry(document.querySelector('#cycle-description'), { distance: 6, duration: 400 });
+      tween(scene, { ...view, duration: 1.65, ease: 'power2.inOut', overwrite: true });
+      tween(land, { opacity: target.land, duration: 1.65, ease: 'power2.inOut', overwrite: true });
+      tween(flow, { ...target.flow, duration: 1.65, ease: 'power2.inOut', overwrite: true });
+    } else {
+      gsap.set(scene, view);
+      gsap.set(land, { opacity: target.land });
     }
     stageButtons.forEach((button, i) => {
       button.classList.toggle('selected', i === stage);
       button.setAttribute('aria-selected', String(i === stage));
       button.tabIndex = i === stage ? 0 : -1;
     });
+    positionIndicator(!changed);
     if (focus) stageButtons[stage].focus();
   }
   stageButtons.forEach((button, index) => {

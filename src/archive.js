@@ -1,6 +1,6 @@
 import { icon } from './icons.js';
 import { documentaryRecords as originals } from './documentary.js';
-import { observeReveals } from './motion.js';
+import { observeReveals, transitionContent } from './motion.js';
 
 const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 
@@ -57,7 +57,7 @@ function mediaUrl(record) {
   return objectUrls.get(record.id);
 }
 
-function render() {
+function render({ reveal = true } = {}) {
   const all = [...originals, ...records];
   document.querySelector('#archive-count').textContent = all.length;
   const visible = all.filter(record => filter === 'Todo' || record.category === filter);
@@ -72,7 +72,7 @@ function render() {
       <h3>${escapeHtml(record.title)}</h3><p class="card-subtitle">${escapeHtml(record.subtitle || record.description || record.year || 'Archivo de la comunidad').slice(0, 180)}</p>
       ${record.kind === 'documentary' ? '<p class="card-credit">Foto: Ministerio de Defensa del Perú · CC BY 2.0</p>' : ''}
     </button>`).join('') : '<p class="empty-state">Todavía no hay fragmentos en este tema. Puedes añadir el primero.</p>';
-  observeReveals(document.querySelectorAll('.archive-card'), 80);
+  if (reveal) observeReveals(document.querySelectorAll('.archive-card'), 80);
   document.querySelectorAll('[data-record]').forEach(button => button.addEventListener('click', () => {
     const record = all.find(item => item.id === button.dataset.record);
     if (record) openDetail(record);
@@ -259,9 +259,13 @@ export function initArchive() {
     document.querySelector('#dialog-body').innerHTML = '';
   });
   document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => {
+    if (filter === button.dataset.filter) return;
+    const buttons = [...document.querySelectorAll('[data-filter]')];
+    const previousIndex = buttons.findIndex(item => item.dataset.filter === filter);
+    const direction = buttons.indexOf(button) > previousIndex ? 1 : -1;
     filter = button.dataset.filter;
     updateFilters();
-    render();
+    transitionContent(document.querySelector('.archive-transition'), () => render({ reveal: false }), { direction, distance: 36, duration: .7 });
   }));
   document.querySelectorAll('.add-media').forEach(button => button.addEventListener('click', openUpload));
   render();

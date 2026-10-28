@@ -9,9 +9,12 @@
   transform: scaleX(var(--reading-progress, 0));
   transform-origin: left;
 }
+.motion-notice { font-size: 11px; line-height: 1.7; color: #596d4d; margin: 12px 0 0; }
 
 .artwork-depth { position: absolute; inset: -2%; transform: translate3d(var(--pointer-x, 0px), var(--pointer-y, 0px), 0); }
+.artwork-scene { position: absolute; inset: 0; transform-origin: center; }
 .artwork-image { animation: landscape-drift 20s ease-in-out infinite alternate; }
+.artwork-land { position: absolute; inset: -3%; background: url('/images/river-territory.png') center / cover no-repeat; opacity: 0; filter: saturate(.75) brightness(.9); }
 .water-light {
   position: absolute;
   inset: -22%;
@@ -42,6 +45,14 @@
 .header-cta:active, .primary-button:active { transform: scale(.97); }
 .nav-link.active::after { animation: dot-arrive .3s ease-out; }
 
+.transition-host { position: relative; overflow: clip; }
+.transition-current:not(.archive-grid), .transition-leaving:not(.archive-grid) { display: flow-root; }
+.transition-leaving { position: absolute; inset: 0 0 auto; width: 100%; pointer-events: none; }
+.transition-leaving.archive-grid { display: grid; }
+.stage-copy { padding-bottom: 10px; margin-bottom: -10px; }
+.cycle-tabs { position: relative; }
+.cycle-tabs button.selected::after { display: none; }
+.cycle-indicator { position: absolute; bottom: -1px; left: 0; height: 2px; background: #425d43; pointer-events: none; }
 .timeline { position: relative; --timeline-progress: .666667; }
 .timeline::after {
   content: '';
@@ -53,11 +64,12 @@
   background: #748961;
   transform-origin: left;
   transform: scaleX(var(--timeline-progress));
-  transition: transform .65s cubic-bezier(.22, 1, .36, 1);
   pointer-events: none;
 }
 .timeline button span { z-index: 1; }
-.timeline button.active span { animation: timeline-echo .8s ease-out; }
+.timeline button.active span { animation: none; box-shadow: none; }
+.timeline-marker { position: absolute; left: 0; bottom: -7px; z-index: 2; width: 14px; height: 14px; border: 1px solid #80956c; border-radius: 50%; background: #e9edde; pointer-events: none; }
+.timeline-marker::after { content: ''; position: absolute; inset: 3px; border-radius: 50%; background: #496444; }
 .content-dialog[open] { animation: dialog-arrive .32s cubic-bezier(.22, 1, .36, 1); }
 .content-dialog[open]::backdrop { animation: backdrop-arrive .25s ease-out; }
 .detail-media { overflow: hidden; }
@@ -97,6 +109,6 @@
 .motion-paused .artwork-image, .motion-paused .timeline::after { transition: none; }
 
 @media (prefers-reduced-motion: reduce) {
-  .artwork-depth { transform: none; }
-  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html:not(.motion-override) .artwork-depth { transform: none; }
+  html:not(.motion-override) *, html:not(.motion-override) *::before, html:not(.motion-override) *::after { animation: none !important; transition: none !important; }
 }

@@ -11,7 +11,7 @@ test('la portada y sus recursos locales cargan sin errores', async ({ page }) =>
   const failures = [];
   page.on('response', response => { if (response.url().startsWith('http://127.0.0.1:5173') && response.status() >= 400) failures.push(response.url()); });
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('La ilusión de habitar al margen.');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('El peligro de habitar al margen.');
   await expect(page.locator('.archive-card')).toHaveCount(archiveSize);
   await page.evaluate(() => document.fonts.ready);
   await page.locator('.archive-card').first().scrollIntoViewIfNeeded();

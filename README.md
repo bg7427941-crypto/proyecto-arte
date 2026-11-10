@@ -1,6 +1,6 @@
-# Al margen
+# El peligro de habitar al margen
 
-Página interactiva del proyecto **«La ilusión de habitar al margen»**, sobre El Niño, el agua y la memoria del territorio en la costa norte del Perú, con Piura como punto de partida. Elaborada a partir de los dos documentos del equipo de Arte y Tecnología de UTEC.
+Página interactiva del proyecto **«El peligro de habitar al margen»**, sobre El Niño, el agua y la memoria del territorio en la costa norte del Perú, con Piura como punto de partida. Elaborada a partir de los dos documentos del equipo de Arte y Tecnología de UTEC.
 
 ## Desarrollo
 

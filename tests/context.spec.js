@@ -31,19 +31,16 @@ test('el filtro combina episodio y tema y distingue las fichas de las fotografí
   await expect(page.locator('.detail-media img')).toHaveAttribute('src', '/images/documental/tumbes-lluvias-2023.jpg');
 });
 
-test('la portada ofrece cuatro casos de años distintos con imagen y abre su ficha', async ({ page }) => {
+test('la portada ofrece tres casos de años distintos con fotografía con imagen y abre su ficha', async ({ page }) => {
   await page.goto('/');
   const cards = page.locator('.case-card');
-  await expect(cards).toHaveCount(4);
+  await expect(cards).toHaveCount(3);
   const years = await page.locator('.case-year').allTextContents();
   expect(new Set(years).size).toBe(years.length);
   for (const image of await page.locator('.case-card img').all()) await image.scrollIntoViewIfNeeded();
   await expect.poll(() => page.locator('.case-card img').evaluateAll(images => images.every(img => img.complete && img.naturalWidth > 0))).toBe(true);
   await cards.nth(0).click();
   await expect(page.getByRole('dialog')).toContainText('10 de marzo de 2023');
-  await page.keyboard.press('Escape');
-  await cards.nth(3).click();
-  await expect(page.getByRole('dialog')).toContainText('1982–1983');
 });
 
 test('la sección de memoria usa la frase del documento y ya no tiene línea de tiempo', async ({ page }) => {

@@ -30,7 +30,7 @@ Las pruebas usan Chromium del sistema cuando está disponible en `/usr/bin/chrom
 - Archivo de ocho registros, filtrable por tema y episodio: cinco fotografías y tres fichas documentales sobre Tumbes, Piura, Lambayeque y el sector La Campiña del río Moche, en La Libertad.
 - Lectura desplegable de la experiencia: significado de la calma, la memoria, el retorno y la participación del visitante.
 - Carga de imágenes y videos con título, ubicación, año, tema y autoría; vista previa y eliminación con confirmación.
-- Cuatro últimos casos en la portada (2023, 2017, 1998 y 1983, un año distinto cada uno), con imagen y acceso directo a su ficha. Se distingue las lluvias vinculadas a Yaku de los episodios de El Niño.
+- Tres últimos casos en la portada (2023, 2017 y 1998, un año distinto cada uno), solo con registro fotográfico y acceso directo a su ficha. Se distingue las lluvias vinculadas a Yaku de los episodios de El Niño.
 - Documentos PDF originales, créditos, navegación por teclado y diseño adaptable.
 
 ## Añadir material
@@ -45,7 +45,7 @@ Para incorporar una entrada permanente para todo el equipo, añade su recurso au
 
 Los dos PDF originales se encuentran en `public/docs/`. La página sintetiza el planteamiento del proyecto y conserva sus referencias. No incorpora como datos comprobados las cifras periodísticas de 2026 que no se verificaron independientemente.
 
-La portada combina la fotografía `piura-carretera-inundada-2017.jpg` (Ministerio de Defensa del Perú, 29 de marzo de 2017, CC BY 2.0) con `river-territory.png`, una imagen artística generada con IA que representa «La calma»: **la capa artística no es un registro documental ni una simulación climática**. `river-delta.png` ya no se usa en la portada. El audio es sintetizado y solo se activa tras una acción del visitante.
+La portada combina la fotografía `piura-carretera-inundada-2017.jpg` (Ministerio de Defensa del Perú, 29 de marzo de 2017, CC BY 2.0) y la calle inundada de Tumbes (`tumbes-lluvias-2023.jpg`, 10 de marzo de 2023) en la etapa «La memoria», con `river-territory.png`, una imagen artística generada con IA que representa «La calma»: **la capa artística no es un registro documental ni una simulación climática**. `river-delta.png` ya no se usa en la portada. El audio es sintetizado y solo se activa tras una acción del visitante.
 
 El Archivo vivo contiene **cinco fotografías y tres fichas documentales**:
 

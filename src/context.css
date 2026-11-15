@@ -67,3 +67,8 @@
 .memory-layout{grid-template-columns:1fr}
 .memory-section h2{max-width:22ch}
 .memory-intro{max-width:560px}
+
+/* Etapa «La memoria»: calle inundada de Tumbes, 2023 */
+.artwork-memory{position:absolute;inset:-3%;background:url('/images/documental/tumbes-lluvias-2023.jpg') center 62%/cover no-repeat;opacity:0;filter:brightness(.78) saturate(1.05) contrast(1.08)}
+.cases-grid{grid-template-columns:repeat(3,1fr)}
+@media(max-width:760px){.cases-grid{grid-template-columns:1fr}.case-card{aspect-ratio:16/10}}

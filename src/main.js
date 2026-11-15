@@ -32,19 +32,18 @@ document.querySelector('#app').innerHTML = `
       <div class="eyebrow-row"><p class="eyebrow"><span class="tiny-dot"></span> ARTE, TERRITORIO Y MEMORIA</p><p class="edition">COSTA NORTE, PERÚ <span>—</span> 2026</p></div>
       <div class="intro-grid"><h1 id="main-title">El peligro de<br> habitar <em>al margen.</em></h1><div class="intro-aside"><p>Creemos vivir separados de la naturaleza.<br class="desktop-break"> Hasta que el agua nos recuerda<br class="desktop-break"> que siempre fuimos parte de ella.</p><a class="text-link" href="#experiencia">Una exploración del ciclo que vuelve ${icon('down')}</a></div></div>
       <div class="intro-cases" aria-labelledby="cases-title">
-        <div class="cases-head"><p class="eyebrow" id="cases-title"><span class="tiny-dot"></span> ÚLTIMOS CASOS</p><p>Cuatro episodios, de 1983 a 2023. Abre cada uno para ver su ficha.</p></div>
+        <div class="cases-head"><p class="eyebrow" id="cases-title"><span class="tiny-dot"></span> ÚLTIMOS CASOS</p><p>Tres episodios con registro fotográfico, de 1998 a 2023. Abre cada uno para ver su ficha.</p></div>
         <ul class="cases-grid">
           <li><button class="case-card" data-open-record="tumbes-2023" aria-label="Abrir el caso de 2023: Tumbes"><img src="/images/documental/tumbes-lluvias-2023.jpg" alt="" width="480" height="600" loading="lazy"><span class="case-info"><span class="case-year">2023</span><span class="case-place">Tumbes</span><span class="case-tag">FOTOGRAFÍA DOCUMENTAL</span></span></button></li>
           <li><button class="case-card" data-open-record="memoria" aria-label="Abrir el caso de 2017: Piura"><img src="/images/documental/piura-paso-inundado-2017.jpg" alt="" width="480" height="600" loading="lazy"><span class="case-info"><span class="case-year">2017</span><span class="case-place">Piura</span><span class="case-tag">FOTOGRAFÍA DOCUMENTAL</span></span></button></li>
           <li><button class="case-card" data-open-record="puente-bolognesi-1998" aria-label="Abrir el caso de 1998: Piura"><img src="/images/documental/piura-puente-bolognesi-huella-1998.jpg" alt="" width="480" height="600" loading="lazy"><span class="case-info"><span class="case-year">1998</span><span class="case-place">Piura</span><span class="case-tag">FOTOGRAFÍA DOCUMENTAL</span></span></button></li>
-          <li><button class="case-card" data-open-record="tumbes-1983" aria-label="Abrir el caso de 1983: Tumbes"><img src="/images/river-territory.png" alt="" width="480" height="600" loading="lazy"><span class="case-info"><span class="case-year">1983</span><span class="case-place">Tumbes</span><span class="case-tag">ILUSTRACIÓN ARTÍSTICA · FICHA</span></span></button></li>
         </ul>
       </div>
     </section>
 
     <section class="experience page-width" id="experiencia" aria-label="Experiencia interactiva del ciclo del agua">
       <div class="artwork" tabindex="0" aria-label="Paisaje artístico interactivo. Usa los controles inferiores para explorar el ciclo del agua.">
-        <div class="artwork-depth"><div class="artwork-scene"><div class="artwork-image"></div><div class="artwork-land"></div></div></div><div class="water-light" aria-hidden="true"></div><canvas id="water-canvas" aria-hidden="true"></canvas><div class="artwork-shade"></div>
+        <div class="artwork-depth"><div class="artwork-scene"><div class="artwork-image"></div><div class="artwork-memory"></div><div class="artwork-land"></div></div></div><div class="water-light" aria-hidden="true"></div><canvas id="water-canvas" aria-hidden="true"></canvas><div class="artwork-shade"></div>
         <div class="artwork-top"><span class="live-label"><span></span> PAISAJE EN MOVIMIENTO</span><span class="art-coordinates">AGUA / TIERRA / MEMORIA</span></div>
         <div class="artwork-title"><p class="eyebrow">UN CICLO. MUCHAS FORMAS DE HABITAR.</p><div class="stage-copy transition-host"><div class="transition-current"><h2 id="art-title">El agua siempre<br><em>regresa.</em></h2></div></div></div>
         <div class="artwork-hint"><span class="cursor-orbit">${icon('plus')}</span><span>Mueve el cursor.<br>Todo está conectado.</span></div>
@@ -52,7 +51,7 @@ document.querySelector('#app').innerHTML = `
       </div>
       <div class="experience-bar"><div class="cycle-tabs" role="tablist" aria-label="Momentos del ciclo"><button id="stage-0" role="tab" aria-selected="false" aria-controls="cycle-description" tabindex="-1" data-stage="0"><span>01</span> La calma</button><button id="stage-1" role="tab" aria-selected="false" aria-controls="cycle-description" tabindex="-1" data-stage="1"><span>02</span> La memoria</button><button id="stage-2" class="selected" role="tab" aria-selected="true" aria-controls="cycle-description" data-stage="2"><span>03</span> El retorno</button><span class="cycle-indicator" aria-hidden="true"></span></div><p class="cycle-description" id="cycle-description" role="tabpanel" aria-labelledby="stage-2" aria-live="polite">El paisaje cambia. Nuestra relación con él, también.</p><span class="cycle-mark">${icon('drop')} TODO ES UN CICLO</span></div>
       <p class="motion-notice" hidden>Tu dispositivo reduce el movimiento. Pulsa reproducir en el paisaje para activar las transiciones.</p>
-      <p class="artwork-note">Portada: fotografía de Piura del 29 de marzo de 2017 (Ministerio de Defensa del Perú, CC BY 2.0) con capa artística animada. «La calma» es una ilustración generada con IA. No es una simulación climática.</p>
+      <p class="artwork-note">Fotografías documentales de Piura (29 de marzo de 2017) y Tumbes (10 de marzo de 2023), Ministerio de Defensa del Perú, CC BY 2.0, con capa artística animada. «La calma» es una ilustración generada con IA. No es una simulación climática.</p>
       <details class="experience-reading">
         <summary>¿Cómo leer este paisaje? <span aria-hidden="true">+</span></summary>
         <div class="reading-content">

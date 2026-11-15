@@ -86,14 +86,6 @@ test('las fuentes originales están disponibles como PDF y el diálogo cierra co
   await expect(page.getByRole('button', { name: 'Fuentes y créditos' })).toBeFocused();
 });
 
-test('la línea de memoria cambia la reflexión seleccionada', async ({ page }) => {
-  await page.goto('/');
-  await page.getByRole('button', { name: '1983', exact: true }).click();
-  await expect(page.locator('#story-title')).toHaveText('La historia también está en el paisaje.');
-  await page.getByRole('button', { name: 'Hoy', exact: true }).click();
-  await expect(page.locator('#story-text')).toContainText('El presente es una oportunidad');
-});
-
 test('una imagen se guarda, persiste tras recargar y se puede eliminar', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Añadir al archivo' }).click();

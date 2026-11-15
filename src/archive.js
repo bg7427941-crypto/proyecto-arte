@@ -233,6 +233,11 @@ function openUpload() {
   });
 }
 
+export function openRecord(id) {
+  const record = [...originals, ...records].find(item => item.id === id);
+  if (record) openDetail(record);
+}
+
 function updateFilters() {
   document.querySelectorAll('[data-filter]').forEach(button => {
     const active = button.dataset.filter === filter;
@@ -253,7 +258,7 @@ export function openSources() {
     <p class="detail-disclosure">Los PDF incluyen también referencias periodísticas de 2026 que no se han verificado de forma independiente para esta página. No se presentan sus cifras como datos comprobados ni se ofrece un pronóstico de El Niño.</p>
     <div class="detail-sources"><h3>FUENTES DEL RECORRIDO · 1982–2023</h3>${sourceLinks(Object.values(researchSources))}<p class="dialog-copy">La investigación de León Altuna aporta el contexto de Tumbes y Piura en 1982–1983 y 1997–1998. INDECI documenta los daños de 1997–1998. SENAMHI y la cobertura del río Moche contextualizan las lluvias de marzo de 2023. Yaku y El Niño son fenómenos distintos.</p></div>
     <div class="detail-sources"><h3>FOTOGRAFÍAS Y FICHAS DEL ARCHIVO</h3><p class="dialog-copy">Las fotografías de Piura en 2017 y Tumbes en 2023 proceden del Ministerio de Defensa del Perú, con licencia <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener noreferrer">CC BY 2.0</a>. El registro del antiguo puente Bolognesi se atribuye a Alfredobi y está declarado de dominio público en Commons; su fecha de toma no está indicada. Las tres fichas de fuentes usan composiciones tipográficas identificadas como tales. Cada entrada conserva su propia procedencia.</p>${sourceLinks(originals.map(record => ({label: `${record.title} · ${record.displayDate}`, url: record.originalUrl})))}</div>
-    <div class="credits"><h3>Arte y Tecnología · UTEC · 2026</h3><p>Sebastian Daniel Cangalaya Martinez · Jenny Melisa Díaz Alarcón · Bruno William Garcia López · Diego Leonel Cardenas Quijaite · Giovanni Ticse (investigación inicial).</p><p>Docente: Isabel del Carmen Collazos Ticona.</p><p>Imágenes de paisaje: estudios artísticos generados con IA. Animación creada para esta experiencia. El paisaje interactivo de portada es una interpretación artística. Las cinco fotografías del Archivo vivo conservan su autoría y sus condiciones de uso; las fichas documentales indican sus fuentes. Audio: textura ambiental sintetizada, no grabación de campo.</p><p>Referencia propuesta por el equipo: <a href="https://refikanadol.com/works/unsupervised/" target="_blank" rel="noopener noreferrer"><u>Unsupervised, Refik Anadol</u></a>. Esta página es una interpretación independiente y no reproduce la obra ni sus recursos.</p><p>El archivo añadido por visitantes se conserva únicamente en su propio navegador. No existe publicación compartida en esta versión.</p></div>
+    <div class="credits"><h3>Arte y Tecnología · UTEC · 2026</h3><p>Sebastian Daniel Cangalaya Martinez · Jenny Melisa Díaz Alarcón · Bruno William Garcia López · Diego Leonel Cardenas Quijaite · Giovanni Ticse (investigación inicial).</p><p>Docente: Isabel del Carmen Collazos Ticona.</p><p>Imágenes de paisaje: estudios artísticos generados con IA. Animación creada para esta experiencia. La portada combina una fotografía documental de Piura (2017, Ministerio de Defensa del Perú, CC BY 2.0) con una capa artística animada. Las cinco fotografías del Archivo vivo conservan su autoría y sus condiciones de uso; las fichas documentales indican sus fuentes. Audio: textura ambiental sintetizada, no grabación de campo.</p><p>Referencia propuesta por el equipo: <a href="https://refikanadol.com/works/unsupervised/" target="_blank" rel="noopener noreferrer"><u>Unsupervised, Refik Anadol</u></a>. Esta página es una interpretación independiente y no reproduce la obra ni sus recursos.</p><p>El archivo añadido por visitantes se conserva únicamente en su propio navegador. No existe publicación compartida en esta versión.</p></div>
   </div>`);
 }
 

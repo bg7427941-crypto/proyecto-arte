@@ -31,20 +31,24 @@ test('el filtro combina episodio y tema y distingue las fichas de las fotografí
   await expect(page.locator('.detail-media img')).toHaveAttribute('src', '/images/documental/tumbes-lluvias-2023.jpg');
 });
 
-test('la línea comienza en 1983 y mantiene las fuentes de cada episodio al cambiar rápidamente', async ({ page }) => {
+test('la portada ofrece cuatro casos de años distintos con imagen y abre su ficha', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('button', { name: '1983', exact: true })).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.locator('#story-kicker')).toContainText('TUMBES Y PIURA');
-  await expect(page.locator('#story-sources a')).toHaveAttribute('href', /repositorio\.igp\.gob\.pe/);
-  await page.getByRole('button', { name: '2023', exact: true }).click();
-  await expect(page.locator('#story-text')).toContainText('Yaku y El Niño son fenómenos distintos');
-  await expect(page.locator('#story-sources a')).toHaveCount(2);
-  await page.getByRole('button', { name: '1998', exact: true }).click();
-  await expect(page.locator('#story-text')).toContainText('Lambayeque');
-  await expect(page.locator('#story-sources a')).toHaveCount(1);
-  await expect(page.locator('#story-sources a')).toHaveAttribute('href', /portal\.indeci\.gob\.pe/);
-  await expect(page.locator('.timeline-story .transition-leaving')).toHaveCount(0);
-  await page.getByRole('button', { name: 'Hoy', exact: true }).click();
-  await expect(page.locator('#story-sources a')).toHaveCount(0);
-  await expect(page.locator('#story-text')).toContainText('no forman un calendario regular');
+  const cards = page.locator('.case-card');
+  await expect(cards).toHaveCount(4);
+  const years = await page.locator('.case-year').allTextContents();
+  expect(new Set(years).size).toBe(years.length);
+  for (const image of await page.locator('.case-card img').all()) await image.scrollIntoViewIfNeeded();
+  await expect.poll(() => page.locator('.case-card img').evaluateAll(images => images.every(img => img.complete && img.naturalWidth > 0))).toBe(true);
+  await cards.nth(0).click();
+  await expect(page.getByRole('dialog')).toContainText('10 de marzo de 2023');
+  await page.keyboard.press('Escape');
+  await cards.nth(3).click();
+  await expect(page.getByRole('dialog')).toContainText('1982–1983');
+});
+
+test('la sección de memoria usa la frase del documento y ya no tiene línea de tiempo', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('#memory-title')).toContainText('sino que hayamos olvidado que siempre formó parte del lugar que habitamos');
+  await expect(page.locator('.timeline')).toHaveCount(0);
+  await expect(page.locator('#project-title')).toContainText('separados de los ciclos de la naturaleza');
 });

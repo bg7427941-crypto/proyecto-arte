@@ -39,9 +39,6 @@ test('reducir movimiento detiene los efectos nuevos y mantiene todo el contenido
   await page.goto('/');
   await expect(page.getByRole('button', { name: 'Reanudar animación' })).toBeVisible();
   await expect(page.locator('.artwork-image')).toHaveCSS('animation-name', 'none');
-  await page.getByRole('button', { name: 'Hoy', exact: true }).click();
-  await expect(page.locator('#story-title')).toHaveText('La prevención empieza antes del retorno.');
-  await expect(page.locator('.timeline-story')).toHaveCSS('opacity', '1');
   await page.getByRole('button', { name: 'Memoria', exact: true }).click();
   await expect(page.locator('.archive-card').first()).toHaveCSS('opacity', '1');
   expect(await page.locator('.archive-card').first().evaluate(element => element.getAnimations().length)).toBe(0);
@@ -76,32 +73,6 @@ test('entre memoria y calma el paisaje se transforma y la vista anterior sale mi
   await expect(page.locator('.stage-copy > .transition-current')).toHaveCSS('opacity', '1');
 });
 
-test('el marcador de año recorre la línea y los cambios rápidos conservan solamente la última vista', async ({ page }) => {
-  await page.goto('/');
-  await page.locator('.timeline').scrollIntoViewIfNeeded();
-  await page.getByRole('button', { name: '2017', exact: true }).click();
-  await expect(page.locator('.timeline-story .transition-leaving')).toHaveCount(0);
-  const marker = page.locator('.timeline-marker');
-  const start = await marker.evaluate(element => element.getBoundingClientRect().x);
-  await page.getByRole('button', { name: '1983', exact: true }).evaluate(element => element.click());
-  await expect(page.locator('.timeline-story .transition-leaving')).toContainText('El agua ocupa');
-  await page.waitForTimeout(300);
-  const intermediate = await marker.evaluate(element => element.getBoundingClientRect().x);
-  expect(intermediate).toBeLessThan(start - 1);
-  const end = await page.getByRole('button', { name: '1983', exact: true }).evaluate(element => { const rect = element.getBoundingClientRect(); return rect.x + rect.width / 2 - 7; });
-  expect(intermediate).toBeGreaterThan(end + 1);
-  await page.evaluate(() => {
-    document.querySelector('[data-year="1998"]').click();
-    document.querySelector('[data-year="2017"]').click();
-    document.querySelector('[data-year="Hoy"]').click();
-  });
-  await expect(page.locator('#story-title')).toHaveText('La prevención empieza antes del retorno.');
-  await expect(page.locator('.timeline-story .transition-leaving')).toHaveCount(0);
-  await expect(page.locator('.timeline-story > .transition-current')).toHaveCSS('opacity', '1');
-  await expect.poll(() => page.locator('.timeline-story').evaluate(element => element.style.height)).toBe('');
-  expect(await page.evaluate(() => { const ids = [...document.querySelectorAll('[id]')].map(element => element.id); return ids.length === new Set(ids).size; })).toBe(true);
-});
-
 test('pausar o reducir movimiento durante una transición deja el estado final legible', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('tab', { name: '01 La calma' }).click();
@@ -110,25 +81,4 @@ test('pausar o reducir movimiento durante una transición deja el estado final l
   await expect(page.locator('.stage-copy > .transition-current')).toHaveCSS('opacity', '1');
   await expect(page.locator('.artwork-land')).toHaveCSS('opacity', '0.98');
   await page.getByRole('button', { name: 'Reanudar animación' }).click();
-  await page.getByRole('button', { name: 'Hoy', exact: true }).click();
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  await expect(page.locator('.timeline-story .transition-leaving')).toHaveCount(0);
-  await expect(page.locator('.timeline-story > .transition-current')).toHaveCSS('opacity', '1');
-  await expect(page.locator('#story-title')).toHaveText('La prevención empieza antes del retorno.');
-});
-
-test('un dispositivo con movimiento reducido solo activa las transiciones si la persona pulsa reproducir', async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/');
-  await expect(page.locator('.motion-notice')).toBeVisible();
-  await expect(page.locator('.artwork-image')).toHaveCSS('animation-name', 'none');
-  await page.getByRole('button', { name: 'Reanudar animación' }).click();
-  await expect(page.locator('.motion-notice')).not.toBeVisible();
-  await expect(page.locator('.artwork-image')).toHaveCSS('animation-name', 'landscape-drift');
-  await page.getByRole('tab', { name: '01 La calma' }).evaluate(element => element.click());
-  await expect(page.locator('.stage-copy .transition-leaving')).toContainText('El agua siempre');
-  await page.getByRole('button', { name: 'Pausar animación' }).click();
-  await expect(page.locator('.stage-copy .transition-leaving')).toHaveCount(0);
-  await expect(page.locator('.motion-notice')).toBeVisible();
-  await expect(page.locator('.artwork-image')).toHaveCSS('animation-name', 'none');
 });

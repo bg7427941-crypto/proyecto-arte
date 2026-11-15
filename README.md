@@ -25,12 +25,12 @@ Las pruebas usan Chromium del sistema cuando está disponible en `/usr/bin/chrom
 ## Qué incluye
 
 - Paisaje con partículas, ondas y desplazamiento suave que responden al cursor, iluminación en movimiento y tres etapas: calma, memoria y retorno. GSAP interpola la mezcla entre tierra y agua, el encuadre y el flujo de partículas al cambiar de etapa.
-- Entrada progresiva de secciones y tarjetas al desplazarse e indicador de avance de lectura. Las etapas, la línea de memoria y los filtros conservan la vista saliente mientras entra la siguiente; los indicadores se desplazan hasta la nueva selección y la altura del contenido cambia gradualmente.
+- Entrada progresiva de secciones y tarjetas al desplazarse e indicador de avance de lectura. Las etapas y los filtros conservan la vista saliente mientras entra la siguiente; los indicadores se desplazan hasta la nueva selección y la altura del contenido cambia gradualmente.
 - Pausa del movimiento decorativo de la página, pantalla completa, sonido ambiental opcional y respeto a la preferencia de movimiento reducido. Si el dispositivo reduce el movimiento, se muestra una indicación y la persona puede activarlo expresamente con reproducir. Pausar o cambiar esa preferencia durante una transición deja el estado final legible. Las animaciones del paisaje se suspenden cuando sale de la pantalla; los efectos se detienen al ocultar la pestaña.
 - Archivo de ocho registros, filtrable por tema y episodio: cinco fotografías y tres fichas documentales sobre Tumbes, Piura, Lambayeque y el sector La Campiña del río Moche, en La Libertad.
 - Lectura desplegable de la experiencia: significado de la calma, la memoria, el retorno y la participación del visitante.
 - Carga de imágenes y videos con título, ubicación, año, tema y autoría; vista previa y eliminación con confirmación.
-- Línea de memoria de 1982–1983, 1997–1998, 2017 y 2023, con fuentes directas por episodio y una reflexión sobre el presente. Comienza en 1983. Distingue las lluvias vinculadas a Yaku de los episodios de El Niño.
+- Cuatro últimos casos en la portada (2023, 2017, 1998 y 1983, un año distinto cada uno), con imagen y acceso directo a su ficha. Se distingue las lluvias vinculadas a Yaku de los episodios de El Niño.
 - Documentos PDF originales, créditos, navegación por teclado y diseño adaptable.
 
 ## Añadir material
@@ -39,13 +39,13 @@ Desde **«Añadir al archivo»** se pueden incorporar imágenes JPG, PNG, WebP, 
 
 Los archivos se conservan en **IndexedDB, únicamente en el navegador que los añade**. Persisten al recargar, pero no se suben a un servidor ni se comparten entre integrantes. Eliminar los datos del sitio elimina esta colección local. El almacenamiento puede estar limitado o no disponible en navegación privada. Para un archivo colaborativo se necesitarían almacenamiento remoto, autenticación y un flujo de publicación.
 
-Para incorporar una entrada permanente para todo el equipo, añade su recurso autorizado en `public/images/` y sus datos en `src/documentary.js`. Las fichas de fuentes sin fotografía y las entradas de la línea de tiempo se mantienen en `src/research.js`. Identifica los registros documentales con su autoría, fecha, lugar y licencia; mantén diferenciada la interpretación artística de portada.
+Para incorporar una entrada permanente para todo el equipo, añade su recurso autorizado en `public/images/` y sus datos en `src/documentary.js`. Las fichas de fuentes sin fotografía se mantienen en `src/research.js`. Identifica los registros documentales con su autoría, fecha, lugar y licencia; mantén diferenciada la interpretación artística de portada.
 
 ## Contenido y procedencia
 
 Los dos PDF originales se encuentran en `public/docs/`. La página sintetiza el planteamiento del proyecto y conserva sus referencias. No incorpora como datos comprobados las cifras periodísticas de 2026 que no se verificaron independientemente.
 
-La portada combina `river-delta.png` y `river-territory.png`, imágenes artísticas generadas con IA, para representar el paso entre tierra y agua: **no son registros documentales de Piura, una comparación real de antes y después ni una simulación climática**. El audio es sintetizado y solo se activa tras una acción del visitante.
+La portada combina la fotografía `piura-carretera-inundada-2017.jpg` (Ministerio de Defensa del Perú, 29 de marzo de 2017, CC BY 2.0) con `river-territory.png`, una imagen artística generada con IA que representa «La calma»: **la capa artística no es un registro documental ni una simulación climática**. `river-delta.png` ya no se usa en la portada. El audio es sintetizado y solo se activa tras una acción del visitante.
 
 El Archivo vivo contiene **cinco fotografías y tres fichas documentales**:
 
@@ -62,7 +62,7 @@ La referencia proporcionada fue [Unsupervised, de Refik Anadol](https://refikana
 
 ## Estructura
 
-- `src/main.js`: página, navegación y línea de memoria.
+- `src/main.js`: página, navegación y casos de la portada.
 - `src/artwork.js`: animación, sonido y controles de la experiencia.
 - `src/motion.js` y `src/motion.css`: transiciones con GSAP, entradas al desplazarse, avance de lectura y control del movimiento. Las vistas salientes son copias visuales inertes sin IDs duplicados; se retiran al terminar o interrumpir el efecto. Los cambios rápidos priorizan la última selección y el contenido permanece legible si se cancelan los efectos.
 - `src/archive.js`: archivo, persistencia local, carga de medios, fuentes y diálogos.

@@ -9,13 +9,9 @@ import './motion.css';
 import './context.css';
 import { icon } from './icons.js';
 import { initArtwork } from './artwork.js';
-import { initArchive, openSources } from './archive.js';
-import { gsap } from 'gsap';
-import { initMotion, transitionContent, tween } from './motion.js';
-import { timelineStories } from './research.js';
+import { initArchive, openSources, openRecord } from './archive.js';
+import { initMotion } from './motion.js';
 
-const timelineSourceLinks = story => story.sources.map(source => `<a href="${source.url}" target="_blank" rel="noopener noreferrer">${source.label} ${icon('arrow')}</a>`).join('');
-const initialStory = timelineStories['1983'];
 
 document.querySelector('#app').innerHTML = `
   <div class="reading-progress" aria-hidden="true"></div>
@@ -35,6 +31,15 @@ document.querySelector('#app').innerHTML = `
     <section class="intro page-width" id="inicio" aria-labelledby="main-title">
       <div class="eyebrow-row"><p class="eyebrow"><span class="tiny-dot"></span> ARTE, TERRITORIO Y MEMORIA</p><p class="edition">COSTA NORTE, PERÚ <span>—</span> 2026</p></div>
       <div class="intro-grid"><h1 id="main-title">El peligro de<br> habitar <em>al margen.</em></h1><div class="intro-aside"><p>Creemos vivir separados de la naturaleza.<br class="desktop-break"> Hasta que el agua nos recuerda<br class="desktop-break"> que siempre fuimos parte de ella.</p><a class="text-link" href="#experiencia">Una exploración del ciclo que vuelve ${icon('down')}</a></div></div>
+      <div class="intro-cases" aria-labelledby="cases-title">
+        <div class="cases-head"><p class="eyebrow" id="cases-title"><span class="tiny-dot"></span> ÚLTIMOS CASOS</p><p>Cuatro episodios, de 1983 a 2023. Abre cada uno para ver su ficha.</p></div>
+        <ul class="cases-grid">
+          <li><button class="case-card" data-open-record="tumbes-2023" aria-label="Abrir el caso de 2023: Tumbes"><img src="/images/documental/tumbes-lluvias-2023.jpg" alt="" width="480" height="600" loading="lazy"><span class="case-info"><span class="case-year">2023</span><span class="case-place">Tumbes</span><span class="case-tag">FOTOGRAFÍA DOCUMENTAL</span></span></button></li>
+          <li><button class="case-card" data-open-record="memoria" aria-label="Abrir el caso de 2017: Piura"><img src="/images/documental/piura-paso-inundado-2017.jpg" alt="" width="480" height="600" loading="lazy"><span class="case-info"><span class="case-year">2017</span><span class="case-place">Piura</span><span class="case-tag">FOTOGRAFÍA DOCUMENTAL</span></span></button></li>
+          <li><button class="case-card" data-open-record="puente-bolognesi-1998" aria-label="Abrir el caso de 1998: Piura"><img src="/images/documental/piura-puente-bolognesi-huella-1998.jpg" alt="" width="480" height="600" loading="lazy"><span class="case-info"><span class="case-year">1998</span><span class="case-place">Piura</span><span class="case-tag">FOTOGRAFÍA DOCUMENTAL</span></span></button></li>
+          <li><button class="case-card" data-open-record="tumbes-1983" aria-label="Abrir el caso de 1983: Tumbes"><img src="/images/river-territory.png" alt="" width="480" height="600" loading="lazy"><span class="case-info"><span class="case-year">1983</span><span class="case-place">Tumbes</span><span class="case-tag">ILUSTRACIÓN ARTÍSTICA · FICHA</span></span></button></li>
+        </ul>
+      </div>
     </section>
 
     <section class="experience page-width" id="experiencia" aria-label="Experiencia interactiva del ciclo del agua">
@@ -47,7 +52,7 @@ document.querySelector('#app').innerHTML = `
       </div>
       <div class="experience-bar"><div class="cycle-tabs" role="tablist" aria-label="Momentos del ciclo"><button id="stage-0" role="tab" aria-selected="false" aria-controls="cycle-description" tabindex="-1" data-stage="0"><span>01</span> La calma</button><button id="stage-1" role="tab" aria-selected="false" aria-controls="cycle-description" tabindex="-1" data-stage="1"><span>02</span> La memoria</button><button id="stage-2" class="selected" role="tab" aria-selected="true" aria-controls="cycle-description" data-stage="2"><span>03</span> El retorno</button><span class="cycle-indicator" aria-hidden="true"></span></div><p class="cycle-description" id="cycle-description" role="tabpanel" aria-labelledby="stage-2" aria-live="polite">El paisaje cambia. Nuestra relación con él, también.</p><span class="cycle-mark">${icon('drop')} TODO ES UN CICLO</span></div>
       <p class="motion-notice" hidden>Tu dispositivo reduce el movimiento. Pulsa reproducir en el paisaje para activar las transiciones.</p>
-      <p class="artwork-note">Visualización artística, no simulación climática ni registro documental de Piura.</p>
+      <p class="artwork-note">Portada: fotografía de Piura del 29 de marzo de 2017 (Ministerio de Defensa del Perú, CC BY 2.0) con capa artística animada. «La calma» es una ilustración generada con IA. No es una simulación climática.</p>
       <details class="experience-reading">
         <summary>¿Cómo leer este paisaje? <span aria-hidden="true">+</span></summary>
         <div class="reading-content">
@@ -72,9 +77,9 @@ document.querySelector('#app').innerHTML = `
       <div class="archive-foot"><span class="small-dot"></span><p>La memoria se construye entre todos.</p><button class="add-media">Comparte una imagen o un video ${icon('arrowRight')}</button></div>
     </section>
 
-    <section class="memory-section" aria-labelledby="memory-title"><div class="page-width memory-layout"><div><p class="eyebrow"><span class="section-number">02 /</span> LO QUE VUELVE</p><h2 id="memory-title">No es la primera vez.<br><em>¿Qué hemos aprendido?</em></h2><p class="memory-intro">Distintos años, distintas cuencas. Estos casos permiten mirar cómo el agua transforma la vida en la costa norte y qué cuidados pueden sostenerse entre emergencias.</p><p class="source-tag">Cada episodio conserva sus propias fuentes.</p><p class="memory-nuance">Los episodios no son equivalentes: El Niño de 1982–1983 y 1997–1998, El Niño costero de 2017 y las lluvias vinculadas a Yaku en marzo de 2023 tienen contextos distintos.</p></div><div class="timeline-panel"><div class="timeline" role="group" aria-label="Explorar la memoria del territorio">${Object.keys(timelineStories).map(year => `<button data-year="${year}" class="${year === '1983' ? 'active' : ''}" aria-pressed="${year === '1983'}">${year}<span></span></button>`).join('')}<span class="timeline-marker" aria-hidden="true"></span></div><div class="timeline-story transition-host" aria-live="polite"><div class="transition-current"><span id="story-kicker" class="eyebrow">${initialStory.kicker}</span><h3 id="story-title">${initialStory.title}</h3><p id="story-text">${initialStory.text}</p><div id="story-sources" class="story-sources">${timelineSourceLinks(initialStory)}</div></div></div></div></div></section>
+    <section class="memory-section" aria-labelledby="memory-title"><div class="page-width memory-layout"><div><p class="eyebrow"><span class="section-number">02 /</span> LO QUE VUELVE</p><h2 id="memory-title">El peligro no es que el fenómeno vuelva,<br><em>sino que hayamos olvidado que siempre formó parte del lugar que habitamos.</em></h2><p class="memory-intro">Distintos años, distintas cuencas. Estos casos permiten mirar cómo el agua transforma la vida en la costa norte y qué cuidados pueden sostenerse entre emergencias.</p><p class="source-tag">Cada episodio conserva sus propias fuentes.</p><p class="memory-nuance">Los episodios no son equivalentes: El Niño de 1982–1983 y 1997–1998, El Niño costero de 2017 y las lluvias vinculadas a Yaku en marzo de 2023 tienen contextos distintos.</p></div></div></section>
 
-    <section class="project-section page-width" id="proyecto" aria-labelledby="project-title"><div class="project-label"><p class="eyebrow"><span class="section-number">03 /</span> EL PROYECTO</p><span class="project-seal" aria-hidden="true">${icon('drop')}<span>AGUA<br>TERRITORIO<br>MEMORIA</span></span></div><div class="project-content"><h2 id="project-title">¿Realmente podemos vivir<br><em>al margen de la naturaleza?</em></h2><div class="project-columns"><p>«El peligro de habitar al margen» nace de esta pregunta. Exploramos cómo habitamos un territorio que alterna entre la escasez y el exceso de agua, como si la calma fuera su único estado posible.</p><p>Esta obra no busca culpar a quienes viven en Piura. Invita a pensar en la memoria colectiva, la prevención y la responsabilidad compartida. El peligro no es solo que el agua vuelva, sino que olvidemos que siempre fue parte del lugar.</p></div><button class="sources-button text-link">Conoce la investigación y sus fuentes ${icon('arrow')}</button><div class="project-meta"><span>ARTE Y TECNOLOGÍA</span><span>UNIVERSIDAD DE INGENIERÍA Y TECNOLOGÍA</span><span>LIMA, PERÚ · 2026</span></div></div></section>
+    <section class="project-section page-width" id="proyecto" aria-labelledby="project-title"><div class="project-label"><p class="eyebrow"><span class="section-number">03 /</span> EL PROYECTO</p><span class="project-seal" aria-hidden="true">${icon('drop')}<span>AGUA<br>TERRITORIO<br>MEMORIA</span></span></div><div class="project-content"><h2 id="project-title">¿Realmente podemos vivir<br><em>separados de los ciclos de la naturaleza?</em></h2><div class="project-columns"><p>«El peligro de habitar al margen» nace de esta pregunta. Exploramos cómo habitamos un territorio que alterna entre la escasez y el exceso de agua, como si la calma fuera su único estado posible.</p><p>Esta obra no busca culpar a quienes viven en Piura. Invita a pensar en la memoria colectiva, la prevención y la responsabilidad compartida. El peligro no es solo que el agua vuelva, sino que olvidemos que siempre fue parte del lugar.</p></div><button class="sources-button text-link">Conoce la investigación y sus fuentes ${icon('arrow')}</button><div class="project-meta"><span>ARTE Y TECNOLOGÍA</span><span>UNIVERSIDAD DE INGENIERÍA Y TECNOLOGÍA</span><span>LIMA, PERÚ · 2026</span></div></div></section>
     <section class="closing page-width"><span class="closing-mark" aria-hidden="true">≈</span><p>No estamos fuera del ciclo.<br><em>Somos parte de él.</em></p><a href="#inicio" aria-label="Volver al inicio">${icon('down')}</a></section>
   </main>
   <footer class="site-footer page-width"><a class="wordmark" href="#inicio">al margen<span class="brand-dot">°</span></a><p>Un proyecto en construcción. Una pregunta abierta.</p><button class="sources-button">Fuentes y créditos ${icon('arrow')}</button><span>© 2026</span></footer>
@@ -116,32 +121,4 @@ const navObserver = new IntersectionObserver(entries => {
 }, { rootMargin: '-10% 0px -65% 0px' });
 document.querySelectorAll('#inicio, #experiencia, #archivo, #proyecto').forEach(section => navObserver.observe(section));
 
-const yearButtons = [...document.querySelectorAll('[data-year]')];
-const timeline = document.querySelector('.timeline');
-const marker = document.querySelector('.timeline-marker');
-let selectedYear = 0;
-function positionYearMarker(immediate = false) {
-  const button = yearButtons[selectedYear];
-  const properties = { x: button.offsetLeft + button.offsetWidth / 2 - marker.offsetWidth / 2 };
-  if (immediate) gsap.set(marker, properties);
-  else tween(marker, { ...properties, duration: .9, ease: 'power3.inOut', overwrite: true });
-}
-new ResizeObserver(() => positionYearMarker(true)).observe(timeline);
-yearButtons.forEach((button, index) => button.addEventListener('click', () => {
-  if (selectedYear === index) return;
-  const direction = index > selectedYear ? 1 : -1;
-  selectedYear = index;
-  yearButtons.forEach(item => {
-    item.classList.toggle('active', item === button);
-    item.setAttribute('aria-pressed', String(item === button));
-  });
-  const story = timelineStories[button.dataset.year];
-  transitionContent(document.querySelector('.timeline-story'), () => {
-    document.querySelector('#story-kicker').textContent = story.kicker;
-    document.querySelector('#story-title').textContent = story.title;
-    document.querySelector('#story-text').textContent = story.text;
-    document.querySelector('#story-sources').innerHTML = timelineSourceLinks(story);
-  }, { direction, distance: 56, duration: .85 });
-  tween(timeline, { '--timeline-progress': String(index / (yearButtons.length - 1)), duration: .9, ease: 'power3.inOut', overwrite: true });
-  positionYearMarker();
-}));
+document.querySelectorAll('[data-open-record]').forEach(button => button.addEventListener('click', () => openRecord(button.dataset.openRecord)));

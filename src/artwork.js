@@ -29,7 +29,7 @@ export function initArtwork() {
   const ripples = [];
   const stages = [
     { title: 'La calma también<br><em>es parte del ciclo.</em>', caption: 'LA CALMA', description: 'La tierra parece inmóvil. El ciclo no se detiene.', land: .98, memory: 0, scale: 1.08, x: -2, y: 1, flow: { speed: .18, turbulence: .3, red: 243, green: 225, blue: 183 } },
-    { title: 'Lo que el territorio<br><em>no olvida.</em>', caption: 'LA MEMORIA', description: 'Las huellas del agua permanecen, aunque dejemos de mirarlas.', land: .48, memory: 1, scale: 1.2, x: 2, y: -2, flow: { speed: .75, turbulence: .7, red: 207, green: 226, blue: 206 } },
+    { title: 'Lo que el territorio<br><em>no olvida.</em>', caption: 'LA MEMORIA', description: 'Las huellas del agua permanecen, aunque dejemos de mirarlas.', land: 0, memory: 1, scale: 1.04, x: 2, y: -2, flow: { speed: .75, turbulence: .7, red: 207, green: 226, blue: 206 } },
     { title: 'El agua siempre<br><em>regresa.</em>', caption: 'EL RETORNO', description: 'El paisaje cambia. Nuestra relación con él, también.', land: 0, memory: 0, scale: 1, x: 0, y: 0, flow: { speed: 1.4, turbulence: 1.2, red: 183, green: 232, blue: 224 } },
   ];
   const flow = { ...stages[stage].flow };

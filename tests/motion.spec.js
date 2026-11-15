@@ -52,7 +52,7 @@ test('entre memoria y calma el paisaje se transforma y la vista anterior sale mi
   await page.goto('/');
   await page.getByRole('tab', { name: '02 La memoria' }).click();
   const land = page.locator('.artwork-land');
-  await expect.poll(() => land.evaluate(element => Number(getComputedStyle(element).opacity))).toBeCloseTo(.48, 2);
+  await expect.poll(() => land.evaluate(element => Number(getComputedStyle(element).opacity))).toBeCloseTo(0, 2);
   const indicatorBefore = await page.locator('.cycle-indicator').evaluate(element => element.getBoundingClientRect().x);
   await page.getByRole('tab', { name: '01 La calma' }).evaluate(element => element.click());
   await expect(page.locator('.stage-copy .transition-leaving')).toContainText('Lo que el territorio');

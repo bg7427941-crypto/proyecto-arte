@@ -4,8 +4,22 @@ import { researchRecords, researchSources } from './research.js';
 import { observeReveals, transitionContent } from './motion.js';
 
 const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
-const originals = [...documentaryRecords, ...researchRecords].sort((a, b) => Number(a.year) - Number(b.year));
-const periodLabels = { '1983': '1982–1983', '1998': '1997–1998' };
+const periodLabels = {
+  '1983': '1982–1983',
+  '1998': '1997–1998',
+  '2002': '2001–2002',
+};
+const selectedOriginalIds = new Set([
+  'tumbes-1983',
+  'puente-bolognesi-1998',
+  'piura-2002',
+  'memoria',
+  'piura-2019',
+  'tumbes-2023',
+]);
+const originals = [...documentaryRecords, ...researchRecords]
+  .filter(record => selectedOriginalIds.has(record.id))
+  .sort((a, b) => Number(a.year) - Number(b.year));
 
 let records = [];
 let filter = 'Todo';
@@ -61,7 +75,18 @@ function mediaUrl(record) {
 }
 
 function render({ reveal = true } = {}) {
-  const all = [...originals, ...records];
+  const seenYears = new Set();
+
+  const all = [...originals, ...records].filter(record => {
+    const yearKey = record.year
+      ? String(record.year)
+      : `sin-anio-${record.id}`;
+
+    if (seenYears.has(yearKey)) return false;
+
+    seenYears.add(yearKey);
+    return true;
+  });
   document.querySelector('#archive-count').textContent = all.length;
   const periodSelect = document.querySelector('#archive-period');
   const years = [...new Set(all.map(record => record.year).filter(Boolean))].sort();
@@ -73,7 +98,11 @@ function render({ reveal = true } = {}) {
   document.querySelector('#archive-grid').innerHTML = visible.length ? visible.map(record => `
     <button class="archive-card" data-record="${escapeHtml(record.id)}" data-kind="${record.kind || 'local'}">
       <div class="card-image">
-        ${record.kind === 'research' ? `<div class="research-cover" aria-hidden="true"><span>${escapeHtml(record.period || record.year)}</span><p>${escapeHtml(record.location)}</p><small>UNA HUELLA EN EL ARCHIVO</small></div>` : record.file?.type.startsWith('video/') ? `<video src="${mediaUrl(record)}" poster="/images/video-cover.svg" preload="metadata" muted playsinline aria-hidden="true"></video>` : `<img src="${mediaUrl(record)}" alt="" loading="lazy" width="600" height="365">`}
+        ${record.file?.type.startsWith('video/') ? `<video src="${mediaUrl(record)}" poster="/images/video-cover.svg" preload="metadata" muted playsinline aria-hidden="true"></video>`
+        : (record.image || record.file)
+        ? `<img src="${escapeHtml(mediaUrl(record))}" alt="${escapeHtml(record.alt || record.title)}" loading="lazy" width="600" height="365">`
+        : `<div class="research-cover" aria-hidden="true"><span>${escapeHtml(record.period || record.year)}</span><p>${escapeHtml(record.location)}</p><small>UNA HUELLA EN EL ARCHIVO</small></div>`
+        }
         <span class="card-type">${icon(record.file?.type.startsWith('video/') ? 'play' : 'image')}${record.file ? record.file.type.startsWith('video/') ? 'VIDEO AÑADIDO' : 'IMAGEN AÑADIDA' : record.kind === 'documentary' ? 'FOTOGRAFÍA DOCUMENTAL' : 'FICHA DOCUMENTAL'}</span>
         <span class="card-open">${icon('arrow')}</span>
       </div>
@@ -101,8 +130,8 @@ function sourceLinks(sources) {
 function openDetail(record) {
   const isVideo = record.file?.type.startsWith('video/');
   openDialog(`
-    ${record.kind === 'research' ? `<div class="research-cover research-detail"><span>${escapeHtml(record.period || record.year)}</span><p>${escapeHtml(record.location)}</p><small>FICHA DOCUMENTAL / LECTURA DE FUENTES</small></div>` : `<div class="detail-media">${isVideo ? `<video src="${mediaUrl(record)}" controls playsinline preload="metadata"></video>` : `<img src="${mediaUrl(record)}" alt="${escapeHtml(record.alt || record.title)}">`}</div>`}
-    ${record.caption ? `<p class="photo-caption">${escapeHtml(record.caption)}</p>` : ''}
+      ${record.kind === 'research' && !record.image ? `<div class="research-cover research-detail"><span>${escapeHtml(record.period || record.year)}</span><p>${escapeHtml(record.location)}</p><small>FICHA DOCUMENTAL / LECTURA DE FUENTES</small></div>` : `<div class="detail-media">${isVideo ? `<video src="${mediaUrl(record)}" controls playsinline preload="metadata"></video>` : `<img src="${escapeHtml(mediaUrl(record))}" alt="${escapeHtml(record.alt || record.title)}">`}</div>`}
+      ${record.caption ? `<p class="photo-caption">${escapeHtml(record.caption)}</p>` : ''}
     <div class="dialog-padding"><p class="eyebrow">ARCHIVO VIVO / ${escapeHtml(record.category.toUpperCase())}</p>
       <h2 id="dialog-title">${escapeHtml(record.title)}</h2>
       <p class="detail-meta">${escapeHtml(record.location)}${record.displayDate || record.year ? ` · ${escapeHtml(record.displayDate || record.year)}` : ''}</p>

@@ -24,7 +24,6 @@
 .research-detail > small { font-size: 8px; }
 .archive-card[data-kind="research"] .card-open { background: #344e3e; }
 .memory-nuance { font-size: 10px; color: #536349; line-height: 1.8; max-width: 370px; margin-top: 20px; }
-.timeline { --timeline-progress: 0; }
 .story-sources { margin-top: 17px; }
 .story-sources a { display: flex; align-items: start; gap: 8px; font-size: 10px; line-height: 1.7; color: #405b3c; text-decoration: underline; text-underline-offset: 3px; margin-top: 9px; }
 .story-sources .icon { width: 12px; height: 12px; flex-shrink: 0; margin-top: 3px; }
@@ -47,13 +46,15 @@
 }
 
 /* Portada: imagen principal más viva y últimos casos sobre ella */
-.artwork-image{background-image:url('/images/documental/piura-carretera-inundada-2017.jpg');background-position:center 42%;filter:brightness(1.04) saturate(1.3) contrast(1.12)}
+.artwork-image{background-image:url('/images/documental/piura-carretera-inundada-2017.jpg');background-position:center 42%;filter:brightness(1.02) saturate(1.3) contrast(1.15)}
 .artwork-shade{background:linear-gradient(180deg,rgba(4,29,27,.18),transparent 30%,transparent 55%,rgba(5,26,23,.55))}
 #water-canvas{opacity:.34}
-.artwork-cases{position:absolute;right:28px;bottom:62px;z-index:4;display:grid;gap:9px;justify-items:end}
-.artwork-cases-label{font-family:var(--mono);font-size:8px;letter-spacing:.14em;display:flex;align-items:center;gap:8px;text-shadow:0 1px 6px #0008}
-.artwork-cases ul{list-style:none;margin:0;padding:0;display:flex;gap:10px}
-.case-card{position:relative;display:block;width:clamp(120px,12vw,172px);aspect-ratio:3/2;overflow:hidden;border-radius:4px;color:#fff;text-align:left;background:#163c3c;isolation:isolate;cursor:pointer;border:1px solid #ffffff66;box-shadow:0 8px 22px #0000004d;transition:transform .35s,border-color .35s}
+.artwork-cases{margin:26px 0 6px}
+.cases-head{display:flex;align-items:baseline;justify-content:space-between;gap:20px;margin-bottom:14px;flex-wrap:wrap}
+.cases-head p{margin:0;font-size:13px;color:#5d6b57}
+.artwork-cases-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;display:flex;align-items:center;gap:8px;color:#344e3e}
+.artwork-cases ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.case-card{position:relative;display:block;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:4px;color:#fff;text-align:left;background:#163c3c;isolation:isolate;cursor:pointer;border:1px solid #dee3d2;box-shadow:0 8px 22px #1b2c2433;transition:transform .35s,border-color .35s}
 .case-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
 .case-card:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgba(4,26,23,.82));z-index:1}
 .case-card:hover,.case-card:focus-visible{transform:translateY(-4px);border-color:#fff}
@@ -62,11 +63,25 @@
 .case-info{position:absolute;left:10px;right:10px;bottom:7px;z-index:2;display:flex;align-items:baseline;justify-content:space-between;gap:6px}
 .case-year{font-family:var(--serif);font-size:24px;line-height:1;letter-spacing:-.5px}
 .case-place{font-size:10px;font-weight:500}
-@media(max-width:900px){.artwork-cases{left:18px;right:18px;top:62px;bottom:auto;justify-items:stretch}.artwork-cases ul{gap:8px}.artwork-cases li{flex:1}.case-card{width:100%;aspect-ratio:3/2}.case-year{font-size:19px}.case-place{font-size:9px}}
 /* Memoria sin línea de tiempo */
 .memory-layout{grid-template-columns:1fr}
 .memory-section h2{max-width:22ch}
 .memory-intro{max-width:560px}
 
 /* Etapa «La memoria»: calle inundada de Tumbes, 2023 */
-.artwork-memory{position:absolute;inset:-3%;background:url('/images/documental/tumbes-lluvias-2023.jpg') center 62%/cover no-repeat;opacity:0;filter:brightness(.78) saturate(1.05) contrast(1.08)}
+.artwork-memory{position:absolute;inset:-3%;background:url('/images/documental/piura-paso-inundado-2017.jpg') center 50%/cover no-repeat;opacity:0;filter:brightness(.78) saturate(1.05) contrast(1.08)}
+
+.case-year{font-size:32px}.case-place{font-size:12px}
+@media(max-width:700px){.artwork-cases ul{grid-template-columns:1fr}.case-card{aspect-ratio:16/8}}
+
+/* Pestañas del ciclo sobre el paisaje */
+.artwork .cycle-tabs{position:absolute;right:28px;bottom:58px;z-index:5;gap:22px;padding:11px 18px 12px;border:1px solid #ffffff55;border-radius:999px;background:rgba(5,26,23,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);align-self:auto}
+.artwork .cycle-tabs button{color:#ffffffcc;padding:2px 0}
+.artwork .cycle-tabs button span{color:#ffffff99}
+.artwork .cycle-tabs button.selected{color:#fff}
+.artwork .cycle-tabs button.selected span{color:#fff}
+.artwork .cycle-tabs button:focus-visible{outline:2px solid #fff;outline-offset:4px}
+.artwork .cycle-tabs button.selected:after{display:none}
+.artwork .cycle-indicator{background:#fff;bottom:-3px}
+.experience-bar{justify-content:space-between}
+@media(max-width:900px){.artwork .cycle-tabs{right:auto;left:18px;right:18px;top:52px;bottom:auto;justify-content:center;gap:16px;padding:9px 12px 10px;border-radius:14px}.artwork-hint{top:48%}}
